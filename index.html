@@ -111,6 +111,13 @@
         <span>EDTA Water Hardness</span>
       </button>
 
+      <!-- Tab 2: Conductometry Strong Acid -->
+      <button class="nav-tab flex items-center gap-2 px-3.5 py-2.5 rounded-lg text-xs sm:text-sm font-medium text-[#5C6B4F] hover:text-[#3C4E26] hover:bg-white transition border border-transparent whitespace-nowrap" data-tab="tab-cond-strong">
+        <span class="w-2 h-2 rounded-full bg-[#BCCD9E] indicator-dot"></span>
+        <span class="font-mono text-[11px]">EXP 02</span>
+        <span>Conductometry (HCl vs NaOH)</span>
+      </button>
+
   </nav>
 
   <!-- Main Work Area Container -->
@@ -456,6 +463,341 @@
 
     <!-- ========================================================================= -->
     <!-- MODULE 2: CONDUCTOMETRIC TITRATION (STRONG ACID: HCl vs NaOH)             -->
+    <!-- ========================================================================= -->
+    <section id="tab-cond-strong" class="tab-content hidden space-y-6 animate-fadeIn">
+      
+      <!-- Module Header Card -->
+      <div class="bg-gradient-to-r from-white via-[#F1F6EC] to-[#FFF9D6]/40 border border-[#E5DEC9] rounded-2xl p-5 sm:p-6 shadow-sm relative overflow-hidden">
+        <div class="absolute -right-8 -top-8 w-48 h-48 bg-[#FFDCDC]/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-[#8EA66B] text-white">LAB EXPERIMENT 02</span>
+              <span class="text-xs text-[#5C6B4F] font-medium">Conductometric Analysis (Strong Acid - Strong Base)</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold text-[#3C4E26] tracking-tight">Conductometric Titration of Strong Acid (HCl) against Strong Base (NaOH)</h2>
+            <p class="text-sm text-[#5C6B4F] mt-1 max-w-3xl">
+              Equivalence point determination via classic V-shaped conductance profile with automated least-squares linear regression extrapolation of descending & ascending arms.
+            </p>
+          </div>
+          
+          <div class="flex items-center gap-2 self-start md:self-auto flex-wrap">
+            <button id="cond-strong-btn-load" class="px-3 py-1.5 rounded-lg bg-[#FFF9D6] hover:bg-[#FFF3BF] border border-[#E5DEC9] text-xs font-semibold text-[#66541D] transition flex items-center gap-1.5 shadow-sm">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              <span>Load Standard Lab Data</span>
+            </button>
+            <button id="cond-strong-btn-reset" class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#F1F6EC] border border-[#E5DEC9] text-xs font-semibold text-[#3C4E26] transition shadow-sm">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Titration Parameters & Data Grid (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+          
+          <!-- Parameters Box -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2 pb-2 border-b border-[#E5DEC9]">
+              <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+              Titration Parameters
+            </h3>
+
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <label class="block text-xs font-semibold text-slate-800 mb-1">Volume of HCl taken (V)</label>
+                <div class="relative">
+                  <input type="number" id="cond-strong-vol-acid" value="40" readonly class="w-full bg-[#F3EFE6] border border-[#E5DEC9] rounded-xl px-3 py-2 font-mono text-slate-800 text-sm cursor-not-allowed">
+                  <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">mL</span>
+                </div>
+                <span class="text-[10px] text-[#5C6B4F]">Fixed syllabus volume</span>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-800 mb-1">Normality of NaOH (N₂)</label>
+                <div class="relative">
+                  <input type="number" id="cond-strong-norm-base" step="0.01" min="0.01" max="5" value="0.10" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white rounded-xl px-3 py-2 font-mono text-[#3C4E26] text-sm font-bold">
+                  <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">N</span>
+                </div>
+                <span class="text-[10px] text-[#5C6B4F]">Titrant in burette</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Observation Table Editor with Bulk Paste & Inline Editing -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5DEC9] flex-wrap gap-2">
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26]">Observation Data Table</h3>
+                <p class="text-[11px] text-[#5C6B4F]">Double-click or edit cells inline. Updates chart reactively.</p>
+              </div>
+              <div class="flex gap-1.5 flex-wrap">
+                <!-- Bulk Import Trigger Button -->
+                <button id="cond-strong-btn-import" class="px-2.5 py-1 bg-[#FFDCDC] hover:bg-[#FCD2D2] text-xs font-mono font-semibold text-[#8B4242] rounded border border-[#D8A2A2] transition shadow-sm flex items-center gap-1" title="Import from Excel, Google Sheets or CSV">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                  <span>Import Data</span>
+                </button>
+                <button id="cond-strong-add-row" class="px-2.5 py-1 bg-[#F1F6EC] hover:bg-[#E3EDD8] text-xs font-mono font-semibold text-[#3C4E26] rounded border border-[#BCCD9E] transition shadow-sm">
+                  + Add Point
+                </button>
+                <button id="cond-strong-clear-rows" class="px-2.5 py-1 bg-white hover:bg-rose-50 text-xs font-mono text-[#5C6B4F] hover:text-rose-600 rounded border border-[#E5DEC9] transition">
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <!-- Scrollable Table (Light Theme) -->
+            <div class="max-h-72 overflow-y-auto rounded-xl border border-[#E5DEC9] bg-white">
+              <table class="w-full text-left text-xs font-mono">
+                <thead class="sticky top-0 bg-[#F3EFE6] text-[#3C4E26] font-bold uppercase text-[10px] border-b border-[#E5DEC9]">
+                  <tr>
+                    <th class="p-2.5 w-10 text-center">#</th>
+                    <th class="p-2.5">Vol NaOH (mL)</th>
+                    <th class="p-2.5">Conductance (mS/cm)</th>
+                    <th class="p-2.5 text-center">Diagnostics</th>
+                    <th class="p-2.5 w-10 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="cond-strong-tbody" class="divide-y divide-[#E5DEC9]">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Outlier Notice Container -->
+            <div id="cond-strong-outlier-notice" class="hidden p-2.5 rounded-xl bg-[#FFDCDC]/60 border border-[#D8A2A2] text-xs text-[#8B4242] flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#8B4242] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <span id="cond-strong-outlier-text">Potential Outlier detected. Check conductivity cell immersion.</span>
+            </div>
+
+            <!-- Ion Mobility Theory Pill -->
+            <div class="bg-[#FFFEF5] p-3 rounded-xl border border-[#FFF9D6] text-[11px] text-slate-800 space-y-1">
+              <div class="text-[#66541D] font-bold flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span>Electrolytic Mobility Theory:</span>
+              </div>
+              <p>
+                Initial conductance is high due to fast <span class="text-[#3C4E26] font-mono font-bold">H⁺</span> (λ° = 349.8 S·cm²/mol). As NaOH is added, H⁺ is replaced by slower <span class="text-slate-800 font-mono font-bold">Na⁺</span> (λ° = 50.1), causing linear drop. Past neutralization (V₂), excess <span class="text-[#8EA66B] font-mono font-bold">OH⁻</span> (λ° = 198.6) causes sharp linear rise.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Interactive Virtual Titration Simulation Box (Pre-Lab Simulator) -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5DEC9]">
+              <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#8EA66B]"></span>
+                <span>Virtual Lab Simulator</span>
+              </h3>
+              <span class="text-xs px-2 py-0.5 rounded bg-[#FFF9D6] text-[#66541D] font-mono font-semibold border border-[#E5DEC9]">Interactive</span>
+            </div>
+
+            <div class="flex items-center justify-around p-3 bg-slate-50 rounded-xl border border-[#E5DEC9]">
+              <!-- Burette graphic -->
+              <div class="flex flex-col items-center">
+                <div class="text-[10px] font-mono text-[#5C6B4F] mb-1">Burette (NaOH)</div>
+                <div class="w-6 h-28 border-2 border-[#A99F84] rounded-t-sm relative bg-white/70 overflow-hidden flex flex-col justify-end">
+                  <div id="sim-strong-buret-fluid" class="w-full bg-[#8EA66B]/50 transition-all duration-300" style="height: 60%;"></div>
+                </div>
+                <!-- Stopcock -->
+                <div class="w-8 h-2 bg-[#A99F84] rounded mt-0.5"></div>
+              </div>
+
+              <!-- Beaker graphic with Stirrer -->
+              <div class="flex flex-col items-center">
+                <div class="text-[10px] font-mono text-[#5C6B4F] mb-1">Conductivity Cell (HCl)</div>
+                <div class="w-20 h-24 border-2 border-[#A99F84] rounded-b-xl relative bg-white/80 overflow-hidden p-1 flex flex-col justify-end">
+                  <!-- Solution fluid -->
+                  <div class="w-full h-14 bg-[#BCCD9E]/40 rounded-b-lg relative flex items-center justify-center">
+                    <!-- Spinning Stirrer Bar -->
+                    <div id="sim-strong-stirrer" class="w-8 h-1.5 bg-[#3C4E26] rounded-full anim-stirrer"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Digital Meter -->
+              <div class="flex flex-col items-center">
+                <div class="text-[10px] font-mono text-[#5C6B4F] mb-1">Conductometer</div>
+                <div class="bg-[#26331C] text-[#FFF9D6] p-2.5 rounded-xl border border-[#3C4E26] font-mono text-center shadow-inner">
+                  <div class="text-[9px] text-[#A99F84] uppercase tracking-wider">Conductance</div>
+                  <div id="sim-strong-readout" class="text-base font-bold tracking-tight">8.42</div>
+                  <div class="text-[9px] text-[#8EA66B]">mS / cm</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Simulator Controls -->
+            <div class="flex items-center gap-2 pt-1">
+              <button id="sim-strong-btn-drop" class="flex-1 py-1.5 px-2 bg-[#F1F6EC] hover:bg-[#E3EDD8] border border-[#BCCD9E] text-xs font-semibold text-[#3C4E26] rounded-lg transition flex items-center justify-center gap-1 shadow-sm">
+                <span>+1.0 mL Titrate</span>
+              </button>
+              <button id="sim-strong-btn-autorun" class="py-1.5 px-3 bg-[#8EA66B] hover:bg-[#789354] text-white text-xs font-semibold rounded-lg transition shadow-sm">
+                Auto Run ▶
+              </button>
+              <button id="sim-strong-btn-reset" class="py-1.5 px-2.5 bg-white hover:bg-[#F3EFE6] border border-[#E5DEC9] text-xs text-[#5C6B4F] rounded-lg transition">
+                ↺ Reset
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Chart & Computation Engine (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Chart Container -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#E5DEC9]">
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#8EA66B]"></span>
+                  <span>Conductance vs Volume of NaOH (V-Curve)</span>
+                </h3>
+                <span class="text-xs text-[#5C6B4F]">Extrapolated Best-fit Linear Regressions</span>
+              </div>
+              
+              <div class="flex items-center gap-2 flex-wrap">
+                <!-- Export Chart as PNG -->
+                <button id="cond-strong-btn-export-png" class="px-2.5 py-1 bg-white hover:bg-[#F1F6EC] border border-[#BCCD9E] text-xs font-mono text-[#3C4E26] rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Export Chart as High-Res PNG">
+                  <svg class="w-3.5 h-3.5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  <span>Export PNG</span>
+                </button>
+
+                <!-- Intersection Coordinates Readout Badge -->
+                <div class="px-3 py-1 rounded-lg bg-[#F1F6EC] border border-[#BCCD9E] text-xs font-mono text-[#3C4E26] font-bold flex items-center gap-2 shadow-sm">
+                  <span>V₂ = <strong id="cond-strong-v2-badge" class="text-[#3C4E26]">10.00</strong> mL</span>
+                  <span class="text-[#A99F84]">|</span>
+                  <span>C_min = <span id="cond-strong-cmin-badge">2.10</span> mS/cm</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Canvas wrapper (Crisp White Background) -->
+            <div class="relative h-72 sm:h-80 w-full bg-white rounded-xl border border-[#E5DEC9] p-1">
+              <canvas id="chart-cond-strong"></canvas>
+            </div>
+
+            <!-- Legend and Regression Formulas -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 text-[11px] font-mono border-t border-[#E5DEC9]">
+              <div class="p-2 rounded bg-slate-50 border border-[#E5DEC9] text-[#3C4E26]">
+                <span class="text-[#5C6B4F]">Descending Arm (HCl): </span>
+                <span id="cond-strong-reg-desc" class="font-bold">y = -0.584x + 7.95 (R² = 0.998)</span>
+              </div>
+              <div class="p-2 rounded bg-slate-50 border border-[#E5DEC9] text-[#9E5B5B]">
+                <span class="text-[#5C6B4F]">Ascending Arm (NaOH): </span>
+                <span id="cond-strong-reg-asc" class="font-bold">y = 0.512x - 3.01 (R² = 0.997)</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Mathematical Derivation & Regression Proof Box (Academic Depth) -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-3" id="cond-strong-derivation-box">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5DEC9]">
+              <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                Analytical Intersection & Algebraic Derivation
+              </h3>
+              <span class="text-xs font-mono text-[#5C6B4F] bg-[#FFF9D6] px-2 py-0.5 rounded border border-[#E5DEC9]">Exact Proof</span>
+            </div>
+
+            <div class="space-y-2 font-mono text-xs text-slate-800">
+              <p class="text-[#5C6B4F]">
+                Equivalence volume <span class="font-bold text-[#3C4E26]">V₂</span> is solved analytically at the intersection of the two least-squares regression lines:
+              </p>
+              
+              <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] space-y-1.5">
+                <div>• Arm 1 (Descending): <span class="font-bold text-[#3C4E26]" id="deriv-strong-line1">y = m₁x + c₁</span></div>
+                <div>• Arm 2 (Ascending): <span class="font-bold text-[#9E5B5B]" id="deriv-strong-line2">y = m₂x + c₂</span></div>
+                <div class="border-t border-[#E5DEC9] pt-1.5 font-bold text-[#3C4E26]" id="deriv-strong-algebra">
+                  x = (c₂ - c₁) / (m₁ - m₂) = V₂ = 10.00 mL
+                </div>
+                <div class="text-[11px] text-[#5C6B4F]" id="deriv-strong-residuals">
+                  Residual Analysis: Goodness of fit R₁² = 0.998, R₂² = 0.997 (High experimental concordance).
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result & Calculation Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <!-- Card 1: Equivalence Point V2 -->
+            <div class="bg-gradient-to-br from-white to-[#F1F6EC] border border-[#BCCD9E] rounded-2xl p-4 shadow-sm">
+              <div class="text-xs text-[#5C6B4F] font-bold">Equivalence Volume (V₂)</div>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="res-cond-strong-v2" class="text-3xl font-extrabold font-mono text-[#3C4E26]">10.00</span>
+                <span class="text-xs font-mono text-[#5C6B4F]">mL</span>
+              </div>
+              <p class="text-[11px] text-[#5C6B4F] mt-2 border-t border-[#E5DEC9] pt-2 font-mono">
+                Intersection of two lines
+              </p>
+            </div>
+
+            <!-- Card 2: Normality of HCl -->
+            <div class="bg-gradient-to-br from-white to-[#FFF9D6]/30 border border-[#FFF9D6] rounded-2xl p-4 shadow-sm">
+              <div class="text-xs text-[#5C6B4F] font-bold">Normality of HCl (N₁)</div>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="res-cond-strong-n1" class="text-3xl font-extrabold font-mono text-[#66541D]">0.0250</span>
+                <span class="text-xs font-mono text-[#5C6B4F]">N</span>
+              </div>
+              <p class="text-[11px] text-[#5C6B4F] mt-2 border-t border-[#E5DEC9] pt-2 font-mono">
+                N₁ = (N₂ × V₂) / 40
+              </p>
+            </div>
+
+            <!-- Card 3: Strength of HCl -->
+            <div class="bg-gradient-to-br from-white to-[#FFDCDC]/30 border border-[#D8A2A2] rounded-2xl p-4 shadow-sm">
+              <div class="text-xs text-[#5C6B4F] font-bold">Strength of HCl</div>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="res-cond-strong-str" class="text-3xl font-extrabold font-mono text-[#8B4242]">0.9125</span>
+                <span class="text-xs font-mono text-[#5C6B4F]">g/L</span>
+              </div>
+              <p class="text-[11px] text-[#5C6B4F] mt-2 border-t border-[#D8A2A2] pt-2 font-mono">
+                Strength = N₁ × 36.5
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Step-by-Step Calculation Box -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-3">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              Calculation Steps (Syllabus Formula)
+            </h3>
+            
+            <div class="space-y-2 font-mono text-xs">
+              <div class="p-3 rounded-xl bg-slate-50 border border-[#E5DEC9] text-slate-800 space-y-1">
+                <div class="text-[#3C4E26] font-bold">1. Normality of Hydrochloric Acid:</div>
+                <div class="text-[#5C6B4F] text-[11px]">N₁ × V₁ = N₂ × V₂ &nbsp;⟹&nbsp; N₁ = (N₂ × V₂) / V₁</div>
+                <div id="calc-cond-strong-step1" class="text-slate-800 text-sm pt-1">
+                  N₁ = (0.10 N × 10.00 mL) / 40.0 mL = <span class="text-[#3C4E26] font-extrabold">0.0250 N</span>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#FFF9D6]/40 border border-[#FFF9D6] text-slate-800 space-y-1">
+                <div class="text-[#66541D] font-bold">2. Strength of Hydrochloric Acid Solution:</div>
+                <div class="text-[#5C6B4F] text-[11px]">Strength (g/L) = Normality (N₁) × Equivalent Weight of HCl (36.5 g/equiv)</div>
+                <div id="calc-cond-strong-step2" class="text-slate-800 text-sm pt-1">
+                  Strength = 0.0250 N × 36.5 = <span class="text-[#66541D] font-extrabold">0.9125 g/L</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- MODULE 3: CONDUCTOMETRIC TITRATION (MIXTURE OF ACIDS: HCl + CH3COOH)     -->
     <!-- ========================================================================= -->
   </main>
 
