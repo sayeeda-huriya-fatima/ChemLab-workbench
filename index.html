@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChemLab Computation & Virtual Workbench | B.Tech Engineering Chemistry</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    window.tailwind = window.tailwind || {};
+    try {
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+              mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace'],
+            },
+            colors: {
+              ch: {
+                sage: '#8EA66B',
+                sagedark: '#3C4E26',
+                sagelight: '#F1F6EC',
+                rose: '#D8A2A2',
+                rosedark: '#9E5B5B',
+                blush: '#FFDCDC',
+                cream: '#FFF9D6',
+                creamlight: '#FFFEF5',
+                bg: '#FAF8F5',
+                border: '#E5DEC9',
+                textdark: '#26331C',
+                textmuted: '#5C6B4F',
+              }
+            }
+          }
+        }
+      };
+    } catch (e) {
+      console.warn('Tailwind CDN not active, falling back to core styles.css');
+    }
+  </script>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Canvas Confetti for titration milestone celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚗️</text></svg>">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans selection:bg-[#FFDCDC] selection:text-[#3C4E26] antialiased">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5DEC9] px-4 lg:px-8 py-3 shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#8EA66B] via-[#BCCD9E] to-[#FFDCDC] flex items-center justify-center shadow-md shadow-[#8EA66B]/20 ring-1 ring-[#8EA66B]/30">
+          <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg lg:text-xl font-bold tracking-tight text-[#3C4E26] flex items-center gap-2">
+              ChemLab <span class="text-[#3C4E26] font-extrabold text-sm lg:text-base px-2 py-0.5 rounded bg-[#FFF9D6] border border-[#E5DEC9] uppercase tracking-wider">Workbench</span>
+            </h1>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#FFDCDC] border border-[#D8A2A2] text-[#8B4242] font-semibold hidden sm:inline-flex items-center gap-1.5 shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-[#8EA66B] animate-pulse"></span>
+              B.Tech Syllabus Compliant
+            </span>
+          </div>
+          <p class="text-xs text-[#5C6B4F] font-medium">Engineering Chemistry • Reactive Calculation, Numerical Regressions & Virtual Workbench</p>
+        </div>
+      </div>
+
+      <!-- Action Utility Controls -->
+      <div class="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+        <!-- Audio Feedback Toggle -->
+        <button id="btn-audio-toggle" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#F1F6EC] border border-[#E5DEC9] text-xs text-[#3C4E26] font-medium flex items-center gap-1.5 transition shadow-sm" title="Toggle Laboratory Sound Effects">
+          <svg id="audio-icon-on" class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          </svg>
+          <svg id="audio-icon-off" class="w-4 h-4 text-slate-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/>
+          </svg>
+          <span class="hidden md:inline text-[11px] font-mono">Audio</span>
+        </button>
+
+
+    </div>
+  </header>
+
+  <!-- Navigation Tab Bar (4 Core Syllabus Experiments) -->
+  <nav class="bg-[#F3EFE6] border-b border-[#E5DEC9] px-4 lg:px-8 shadow-inner">
+    <div class="max-w-7xl mx-auto flex space-x-1 sm:space-x-2 overflow-x-auto no-scrollbar py-2">
+      
+      <!-- Tab 1: EDTA -->
+      <button class="nav-tab active flex items-center gap-2 px-3.5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition border whitespace-nowrap bg-[#8EA66B] text-white border-[#8EA66B] shadow-sm" data-tab="tab-edta">
+        <span class="w-2 h-2 rounded-full bg-[#FFDCDC] indicator-dot"></span>
+        <span class="font-mono text-[11px] opacity-90">EXP 01</span>
+        <span>EDTA Water Hardness</span>
+      </button>
+
+  </nav>
+
+  <!-- Main Work Area Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+    <!-- ========================================================================= -->
+    <!-- MODULE 1: EDTA WATER HARDNESS ENGINE                                      -->
+    <!-- ========================================================================= -->
+    <section id="tab-edta" class="tab-content block space-y-6 animate-fadeIn">
+      
+      <!-- Module Header Card -->
+      <div class="bg-gradient-to-r from-white via-[#F1F6EC] to-[#FFF9D6]/40 border border-[#E5DEC9] rounded-2xl p-5 sm:p-6 shadow-sm relative overflow-hidden">
+        <div class="absolute -right-8 -top-8 w-48 h-48 bg-[#FFDCDC]/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-[#8EA66B] text-white">LAB EXPERIMENT 01</span>
+              <span class="text-xs text-[#5C6B4F] font-medium">Complexometric Titration (EDTA)</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold text-[#3C4E26] tracking-tight">Determination of Hardness of Water by EDTA Method</h2>
+            <p class="text-sm text-[#5C6B4F] mt-1 max-w-3xl">
+              Calculation of Total, Permanent, and Temporary hardness expressed as CaCO₃ equivalents (mg/L or ppm) using Eriochrome Black-T (EBT) indicator and standard EDTA solution.
+            </p>
+          </div>
+          
+          <div class="flex items-center gap-2 self-start md:self-auto">
+            <button id="edta-btn-reset" class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#F1F6EC] border border-[#E5DEC9] text-xs font-semibold text-[#3C4E26] transition flex items-center gap-1.5 shadow-sm">
+              <svg class="w-3.5 h-3.5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <span>Reset to Defaults</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout: Inputs & Virtual Bench (Left) vs Real-time Metrics & Calculations (Right) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Inputs & Interactive Virtual Titration Simulation (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+          
+          <!-- Input Card -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-[#E5DEC9]">
+              <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                Burette Rundown Inputs
+              </h3>
+              <!-- Sample Preset Selector -->
+              <select id="edta-preset-select" class="bg-slate-50 border border-[#E5DEC9] text-xs rounded-lg px-2.5 py-1 text-[#3C4E26] font-medium focus:outline-none focus:border-[#8EA66B]">
+                <option value="preset-tap">Preset: Municipal Tap Water</option>
+                <option value="preset-borewell">Preset: Borewell Hard Water</option>
+                <option value="preset-river">Preset: River Sample</option>
+                <option value="preset-soft">Preset: Softened Water</option>
+                <option value="custom">Custom Values</option>
+              </select>
+            </div>
+
+            <!-- Form fields -->
+            <div class="space-y-4 text-sm">
+              <!-- V1 Input -->
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label for="edta-v1" class="font-semibold text-slate-800 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-[#8EA66B]"></span>
+                    <span>V₁ (EDTA for Std Hard Water)</span>
+                  </label>
+                  <span class="text-xs font-mono text-[#5C6B4F]">50 mL sample</span>
+                </div>
+                <div class="relative">
+                  <input type="number" id="edta-v1" step="0.1" min="1" max="100" value="18.5" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white focus:ring-1 focus:ring-[#BCCD9E] rounded-xl px-3 py-2.5 font-mono text-[#3C4E26] text-base font-bold transition">
+                  <span class="absolute right-3 top-2.5 text-xs text-[#5C6B4F] font-mono font-medium">mL</span>
+                </div>
+                <p class="text-[11px] text-[#5C6B4F] mt-1">EDTA volume consumed to titrate 50 mL standard hard water (1 mg CaCO₃/mL).</p>
+              </div>
+
+              <!-- V2 Input -->
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label for="edta-v2" class="font-semibold text-slate-800 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-[#D8A2A2]"></span>
+                    <span>V₂ (EDTA for Sample Water)</span>
+                  </label>
+                  <span class="text-xs font-mono text-[#5C6B4F]">50 mL sample</span>
+                </div>
+                <div class="relative">
+                  <input type="number" id="edta-v2" step="0.1" min="1" max="100" value="23.2" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white focus:ring-1 focus:ring-[#BCCD9E] rounded-xl px-3 py-2.5 font-mono text-[#3C4E26] text-base font-bold transition">
+                  <span class="absolute right-3 top-2.5 text-xs text-[#5C6B4F] font-mono font-medium">mL</span>
+                </div>
+                <p class="text-[11px] text-[#5C6B4F] mt-1">EDTA volume consumed to titrate 50 mL untreated sample water (Total Hardness).</p>
+              </div>
+
+              <!-- V3 Input -->
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label for="edta-v3" class="font-semibold text-slate-800 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-[#8EA66B]"></span>
+                    <span>V₃ (EDTA for Boiled Water)</span>
+                  </label>
+                  <span class="text-xs font-mono text-[#5C6B4F]">50 mL boiled & filtered</span>
+                </div>
+                <div class="relative">
+                  <input type="number" id="edta-v3" step="0.1" min="0" max="100" value="11.4" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white focus:ring-1 focus:ring-[#BCCD9E] rounded-xl px-3 py-2.5 font-mono text-[#3C4E26] text-base font-bold transition">
+                  <span class="absolute right-3 top-2.5 text-xs text-[#5C6B4F] font-mono font-medium">mL</span>
+                </div>
+                <p class="text-[11px] text-[#5C6B4F] mt-1">EDTA volume consumed to titrate 50 mL boiled & filtered sample (Permanent Hardness).</p>
+              </div>
+            </div>
+
+            <!-- Validation Notice -->
+            <div id="edta-validation-warning" class="hidden p-3 rounded-xl bg-[#FFDCDC] border border-[#D8A2A2] text-xs text-[#8B4242] flex items-start gap-2">
+              <svg class="w-4 h-4 text-[#8B4242] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <span><strong>Note:</strong> Boiled water rundown (V₃) cannot exceed total sample rundown (V₂). Please verify your burette observation records.</span>
+            </div>
+          </div>
+
+          <!-- Virtual Colorimeter & Titration Simulation Visualizer -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5DEC9]">
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2">
+                  <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                  Virtual Titration & EBT Transition
+                </h3>
+                <p class="text-[11px] text-[#5C6B4F]">Interactive Erlenmeyer flask with live indicator color shift</p>
+              </div>
+              <span id="flask-state-tag" class="text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold border bg-[#FFDCDC] text-[#8B4242] border-[#D8A2A2]">
+                Wine Red [M-EBT]
+              </span>
+            </div>
+
+            <!-- Interactive Erlenmeyer Flask Graphic -->
+            <div class="flex items-center justify-center py-2 relative">
+              <div class="w-36 h-48 relative flex items-center justify-center">
+                
+                <!-- Falling Titrant Droplet -->
+                <div id="titration-droplet" class="w-2.5 h-2.5 rounded-full bg-[#8EA66B] absolute -top-4 opacity-0 z-10"></div>
+
+                <!-- SVG Flask Representation -->
+                <svg viewBox="0 0 100 120" class="w-full h-full drop-shadow-md">
+                  <defs>
+                    <linearGradient id="flaskLiquidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop id="flask-grad-stop1" offset="0%" stop-color="#9F1239"/>
+                      <stop id="flask-grad-stop2" offset="100%" stop-color="#881337"/>
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Flask Glass Outline -->
+                  <path d="M 40 10 L 40 35 L 15 95 C 10 105, 20 110, 30 110 L 70 110 C 80 110, 90 105, 85 95 L 60 35 L 60 10 Z" 
+                        fill="rgba(245, 240, 230, 0.4)" stroke="#A99F84" stroke-width="2"/>
+                  
+                  <!-- Liquid Fill (dynamic gradient) -->
+                  <path id="flask-liquid" d="M 23 80 Q 50 83 77 80 L 83 95 C 87 103, 80 108, 70 108 L 30 108 C 20 108, 13 103, 17 95 Z" 
+                        fill="url(#flaskLiquidGrad)"/>
+                  
+                  <!-- Graduation Marks on Neck -->
+                  <line x1="38" y1="20" x2="44" y2="20" stroke="#8EA66B" stroke-width="1"/>
+                  <line x1="38" y1="26" x2="42" y2="26" stroke="#8EA66B" stroke-width="1"/>
+                  <line x1="38" y1="32" x2="46" y2="32" stroke="#8EA66B" stroke-width="1"/>
+
+                  <!-- Glass Highlight reflection -->
+                  <path d="M 26 85 L 35 45 L 38 45 L 30 85 Z" fill="white" opacity="0.45"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Titration Progress Slider & Step Controls -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between text-xs font-mono text-[#5C6B4F]">
+                <span>Start (0% EDTA)</span>
+                <span class="font-bold text-[#3C4E26]" id="titration-progress-pct">0%</span>
+                <span>Equivalence (100%)</span>
+              </div>
+              <input type="range" id="edta-sim-slider" min="0" max="120" value="0" step="5" class="w-full h-2 cursor-pointer">
+
+              <!-- Step Buttons -->
+              <div class="flex gap-2 pt-1">
+                <button id="btn-titrate-step" class="flex-1 py-1.5 px-3 bg-[#F1F6EC] hover:bg-[#E3EDD8] border border-[#BCCD9E] text-xs font-semibold text-[#3C4E26] rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm">
+                  <svg class="w-3.5 h-3.5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                  <span>Add 1.0 mL EDTA Drop</span>
+                </button>
+                <button id="btn-jump-endpoint" class="py-1.5 px-3 bg-[#FFF9D6] hover:bg-[#FFF3BF] border border-[#E5DEC9] text-xs font-semibold text-[#66541D] rounded-xl transition shadow-sm">
+                  Jump to Endpoint
+                </button>
+              </div>
+            </div>
+
+            <!-- Indicator Complexation Principle -->
+            <div class="bg-[#FFFEF5] rounded-xl p-3 border border-[#FFF9D6] text-[12px] space-y-1.5 text-slate-800">
+              <div class="text-[#66541D] font-bold flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#8EA66B]"></span>
+                <span>Indicator Complexation Principle:</span>
+              </div>
+              <p>
+                At <span class="text-[#3C4E26] font-mono font-bold">pH 9–10</span> (NH₄Cl + NH₄OH buffer), EBT forms a weak, unstable <span class="text-[#9E5B5B] font-bold">Wine Red</span> complex with Ca²⁺/Mg²⁺.
+              </p>
+              <div class="bg-white p-2 rounded border border-[#E5DEC9] font-mono text-[11px] text-[#3C4E26] font-semibold overflow-x-auto shadow-inner">
+                [M-EBT] (Wine Red) + EDTA → [M-EDTA] (Colorless) + EBT (Sky Blue)
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Right Column: Real-time Metric Cards, Hardness Classification, & Manual Calculation Sheet (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Metric Display Cards Grid (#8EA66B, #D8A2A2, #FFDCDC, #FFF9D6) -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <!-- Card 1: Total Hardness -->
+            <div class="bg-gradient-to-br from-white to-[#F1F6EC] border border-[#BCCD9E] rounded-2xl p-4 shadow-sm relative overflow-hidden group hover:border-[#8EA66B] transition">
+              <div class="flex items-center justify-between text-xs text-[#5C6B4F] mb-1">
+                <span class="font-bold">Total Hardness</span>
+                <span class="font-mono text-[10px] text-[#3C4E26] bg-[#FFF9D6] px-1.5 py-0.5 rounded border border-[#E5DEC9]">V₂/V₁ × 1000</span>
+              </div>
+              <div class="flex items-baseline gap-1.5 mt-1">
+                <span id="metric-total-hardness" class="text-3xl font-extrabold font-mono text-[#3C4E26] tracking-tight">1254.1</span>
+                <span class="text-xs text-[#5C6B4F] font-mono">mg/L</span>
+              </div>
+              <div class="text-[11px] text-[#5C6B4F] mt-2 flex items-center justify-between border-t border-[#E5DEC9] pt-2 font-mono">
+                <span>ppm CaCO₃ eq</span>
+                <span id="metric-total-val" class="text-[#3C4E26] font-bold">1254.05 ppm</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Permanent Hardness -->
+            <div class="bg-gradient-to-br from-white to-[#FFF9D6]/30 border border-[#FFF9D6] rounded-2xl p-4 shadow-sm relative overflow-hidden group hover:border-[#E8DFC8] transition">
+              <div class="flex items-center justify-between text-xs text-[#5C6B4F] mb-1">
+                <span class="font-bold">Permanent Hardness</span>
+                <span class="font-mono text-[10px] text-[#66541D] bg-[#FFF9D6] px-1.5 py-0.5 rounded border border-[#E5DEC9]">V₃/V₁ × 1000</span>
+              </div>
+              <div class="flex items-baseline gap-1.5 mt-1">
+                <span id="metric-perm-hardness" class="text-3xl font-extrabold font-mono text-[#66541D] tracking-tight">616.2</span>
+                <span class="text-xs text-[#5C6B4F] font-mono">mg/L</span>
+              </div>
+              <div class="text-[11px] text-[#5C6B4F] mt-2 flex items-center justify-between border-t border-[#E5DEC9] pt-2 font-mono">
+                <span>Sulfates & Chlorides</span>
+                <span id="metric-perm-val" class="text-[#66541D] font-bold">616.22 ppm</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Temporary Hardness -->
+            <div class="bg-gradient-to-br from-white to-[#FFDCDC]/30 border border-[#D8A2A2] rounded-2xl p-4 shadow-sm relative overflow-hidden group hover:border-[#9E5B5B] transition">
+              <div class="flex items-center justify-between text-xs text-[#5C6B4F] mb-1">
+                <span class="font-bold">Temporary Hardness</span>
+                <span class="font-mono text-[10px] text-[#8B4242] bg-[#FFDCDC] px-1.5 py-0.5 rounded border border-[#D8A2A2]">Total - Perm</span>
+              </div>
+              <div class="flex items-baseline gap-1.5 mt-1">
+                <span id="metric-temp-hardness" class="text-3xl font-extrabold font-mono text-[#8B4242] tracking-tight">637.8</span>
+                <span class="text-xs text-[#5C6B4F] font-mono">mg/L</span>
+              </div>
+              <div class="text-[11px] text-[#5C6B4F] mt-2 flex items-center justify-between border-t border-[#D8A2A2] pt-2 font-mono">
+                <span>Bicarbonates of Ca/Mg</span>
+                <span id="metric-temp-val" class="text-[#8B4242] font-bold">637.83 ppm</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Hardness Classification Badge & Water Quality Analysis Bar -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#E5DEC9]">
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26]">Hardness Classification (USGS / WHO Standard)</h3>
+              </div>
+              <div id="hardness-badge" class="self-start sm:self-auto px-3 py-1 rounded-full text-xs font-bold font-mono uppercase tracking-wider bg-[#FFDCDC] text-[#8B4242] border border-[#D8A2A2] flex items-center gap-1.5 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#8EA66B] animate-ping"></span>
+                <span>Very Hard (&gt; 180 ppm)</span>
+              </div>
+            </div>
+
+            <!-- Segmented Scale Visualizer -->
+            <div class="space-y-2">
+              <div class="h-3 w-full bg-[#F3EFE6] rounded-full overflow-hidden flex p-0.5 border border-[#E5DEC9]">
+                <div class="h-full bg-[#8EA66B] rounded-l-full relative" style="width: 15%;" title="Soft (&lt; 60 ppm)"></div>
+                <div class="h-full bg-[#BCCD9E] relative" style="width: 15%;" title="Moderately Hard (61-120 ppm)"></div>
+                <div class="h-full bg-[#FFF9D6] relative" style="width: 15%;" title="Hard (121-180 ppm)"></div>
+                <div class="h-full bg-[#D8A2A2] rounded-r-full relative flex-1" title="Very Hard (&gt; 180 ppm)"></div>
+              </div>
+              <div class="flex justify-between text-[10px] text-[#5C6B4F] font-mono font-medium px-1">
+                <span>0 ppm (Soft)</span>
+                <span>60 ppm</span>
+                <span>120 ppm (Mod)</span>
+                <span>180 ppm (Hard)</span>
+                <span>&gt; 300 ppm (Very Hard)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step-by-Step Manual Calculation Substitution Box -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5DEC9]">
+              <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Detailed Formula Substitutions (Academic Lab Standard)
+              </h3>
+              <span class="text-xs font-mono text-[#5C6B4F]">50 mL Aliquot Basis</span>
+            </div>
+
+            <div class="space-y-3 font-mono text-xs">
+              <!-- Total Hardness Step -->
+              <div class="p-3 rounded-xl bg-[#F1F6EC] border border-[#BCCD9E] space-y-1">
+                <div class="text-[#3C4E26] font-bold text-xs flex justify-between">
+                  <span>1. Total Hardness of Sample Water:</span>
+                  <span class="text-[#5C6B4F] font-normal">Formula: (V₂ / V₁) × 1000 mg/L</span>
+                </div>
+                <div class="text-slate-800 text-[13px] pt-1" id="step-total-calc">
+                  = (<span class="text-[#8EA66B] font-bold">23.2</span> / <span class="text-[#3C4E26] font-bold">18.5</span>) × 1000 = <span class="text-[#3C4E26] font-extrabold">1254.05 mg/L</span> (ppm CaCO₃ eq)
+                </div>
+              </div>
+
+              <!-- Permanent Hardness Step -->
+              <div class="p-3 rounded-xl bg-[#FFF9D6]/40 border border-[#FFF9D6] space-y-1">
+                <div class="text-[#66541D] font-bold text-xs flex justify-between">
+                  <span>2. Permanent Hardness (Non-Carbonate Hardness):</span>
+                  <span class="text-[#5C6B4F] font-normal">Formula: (V₃ / V₁) × 1000 mg/L</span>
+                </div>
+                <div class="text-slate-800 text-[13px] pt-1" id="step-perm-calc">
+                  = (<span class="text-[#66541D] font-bold">11.4</span> / <span class="text-[#3C4E26] font-bold">18.5</span>) × 1000 = <span class="text-[#66541D] font-extrabold">616.22 mg/L</span> (ppm CaCO₃ eq)
+                </div>
+              </div>
+
+              <!-- Temporary Hardness Step -->
+              <div class="p-3 rounded-xl bg-[#FFDCDC]/30 border border-[#D8A2A2] space-y-1">
+                <div class="text-[#8B4242] font-bold text-xs flex justify-between">
+                  <span>3. Temporary Hardness (Carbonate Hardness):</span>
+                  <span class="text-[#5C6B4F] font-normal">Formula: Total - Permanent Hardness</span>
+                </div>
+                <div class="text-slate-800 text-[13px] pt-1" id="step-temp-calc">
+                  = <span class="text-[#3C4E26] font-bold">1254.05</span> - <span class="text-[#66541D] font-bold">616.22</span> = <span class="text-[#8B4242] font-extrabold">637.83 mg/L</span> (ppm CaCO₃ eq)
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- MODULE 2: CONDUCTOMETRIC TITRATION (STRONG ACID: HCl vs NaOH)             -->
+    <!-- ========================================================================= -->
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-[#E5DEC9] bg-white/90 px-4 py-4 text-center text-xs text-[#5C6B4F]">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#8EA66B]"></span>
+        <span class="font-bold text-[#3C4E26]">ChemLab Computation & Virtual Workbench</span>
+        <span>•</span>
+        <span>B.Tech Engineering Chemistry Laboratory Syllabus</span>
+      </div>
+      <div class="font-mono text-[11px] text-[#5C6B4F]">
+        Engineering Chemistry Laboratory • B.Tech Practical Record System
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: PRINT LAB OBSERVATION SHEET (A4 RECORD BOOK FORMAT)              -->
+  <!-- ========================================================================= -->
+  <!-- Application Logic Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
