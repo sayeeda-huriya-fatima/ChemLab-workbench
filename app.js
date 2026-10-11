@@ -1431,5 +1431,444 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCondMixTable();
   calculateCondMix();
 
+  // --- MODULE 4: POTENTIOMETRIC TITRATION (Fe2+ using KMnO4) ---
+  const potNormKmno4 = document.getElementById('pot-norm-kmno4');
+  const potTbody = document.getElementById('pot-tbody');
+  const potAddRowBtn = document.getElementById('pot-add-row');
+  const potClearBtn = document.getElementById('pot-clear-rows');
+  const potLoadBtn = document.getElementById('pot-btn-load');
+  const potResetBtn = document.getElementById('pot-btn-reset');
+  const potBtnImport = document.getElementById('pot-btn-import');
+  const potBtnExportEmfPng = document.getElementById('pot-btn-export-emf-png');
+  const potBtnExportDerivPng = document.getElementById('pot-btn-export-deriv-png');
+
+  const potV1Badge = document.getElementById('pot-v1-badge');
+  const potDerivMaxBadge = document.getElementById('pot-deriv-max-badge');
+
+  const resPotV1 = document.getElementById('res-pot-v1');
+  const resPotN2 = document.getElementById('res-pot-n2');
+  const resPotIronStr = document.getElementById('res-pot-iron-str');
+
+  const calcPotStep1 = document.getElementById('calc-pot-step1');
+  const calcPotStep2 = document.getElementById('calc-pot-step2');
+
+  // Chart view switches
+  const potBtnSplit = document.getElementById('pot-btn-view-split');
+  const potBtnEmf = document.getElementById('pot-btn-view-emf');
+  const potBtnDeriv = document.getElementById('pot-btn-view-deriv');
+  const potChartsContainer = document.getElementById('pot-charts-container');
+  const potChart1Box = document.getElementById('pot-chart1-box');
+  const potChart2Box = document.getElementById('pot-chart2-box');
+
+  // Standard Lab Data for Fe2+ vs KMnO4
+  const defaultPotData = [
+    { v: 0.0, e: 380 },
+    { v: 2.0, e: 405 },
+    { v: 4.0, e: 430 },
+    { v: 6.0, e: 458 },
+    { v: 8.0, e: 490 },
+    { v: 9.0, e: 520 },
+    { v: 9.5, e: 550 },
+    { v: 9.8, e: 590 },
+    { v: 10.0, e: 720 }, // Sigmoidal jump
+    { v: 10.2, e: 840 }, // Sigmoidal jump peak
+    { v: 10.5, e: 875 },
+    { v: 11.0, e: 895 },
+    { v: 12.0, e: 915 },
+    { v: 14.0, e: 935 }
+  ];
+
+  let potData = JSON.parse(JSON.stringify(defaultPotData));
+  let chartPotEmf = null;
+  let chartPotDeriv = null;
+
+  function renderPotTable() {
+    potTbody.innerHTML = '';
+    
+    // Sort ascending
+    potData.sort((a, b) => a.v - b.v);
+
+    let maxDerivVal = -1;
+    let peakIdx = -1;
+
+    // First pass: find maximum derivative
+    for (let i = 1; i < potData.length; i++) {
+      const dv = potData[i].v - potData[i - 1].v;
+      const de = potData[i].e - potData[i - 1].e;
+      const deriv = dv > 0 ? de / dv : 0;
+      if (deriv > maxDerivVal) {
+        maxDerivVal = deriv;
+        peakIdx = i;
+      }
+    }
+
+    potData.forEach((row, index) => {
+      let deltaV = '-';
+      let deltaE = '-';
+      let derivStr = '-';
+      let isPeak = false;
+      let isInversion = false;
+
+      if (index > 0) {
+        const dv = row.v - potData[index - 1].v;
+        const de = row.e - potData[index - 1].e;
+        const deriv = dv > 0 ? (de / dv) : 0;
+        deltaV = dv.toFixed(1);
+        deltaE = de.toFixed(0);
+        derivStr = deriv.toFixed(1);
+        if (index === peakIdx) {
+          isPeak = true;
+        }
+        if (de < 0) {
+          isInversion = true;
+        }
+      }
+
+      const tr = document.createElement('tr');
+      tr.className = `transition group ${isPeak ? 'pot-peak-row' : 'hover:bg-[#FAF8F5]'}`;
+      tr.innerHTML = `
+        <td class="p-2 text-center text-[#5C6B4F] text-[11px]">${index + 1}</td>
+        <td class="p-2">
+          <input type="number" step="0.1" value="${row.v.toFixed(1)}" data-idx="${index}" data-field="v" class="pot-input table-inline-input w-16">
+        </td>
+        <td class="p-2">
+          <input type="number" step="1" value="${row.e.toFixed(0)}" data-idx="${index}" data-field="e" class="pot-input table-inline-input w-16 text-[#3C4E26] font-bold">
+        </td>
+        <td class="p-2 text-[#5C6B4F] text-xs">${deltaV}</td>
+        <td class="p-2 ${isInversion ? 'text-[#8B4242] font-bold' : 'text-[#5C6B4F]'} text-xs">${deltaE}</td>
+        <td class="p-2 font-semibold ${isPeak ? 'text-[#3C4E26] font-bold flex items-center gap-1.5' : 'text-[#26331C]'} text-xs">
+          <span>${derivStr}</span>
+          ${isPeak ? '<span class="text-[9px] bg-[#8EA66B] text-white px-1.5 py-0.5 rounded font-mono font-bold shadow-sm animate-pulse">★ PEAK (V₁)</span>' : ''}
+          ${isInversion ? '<span class="text-[9px] bg-[#FFDCDC] text-[#8B4242] px-1 rounded border border-[#D8A2A2]">⚠️ Inversion</span>' : ''}
+        </td>
+        <td class="p-2 text-center">
+          <button data-idx="${index}" class="pot-del text-slate-400 hover:text-rose-600 p-1 rounded transition opacity-0 group-hover:opacity-100" title="Delete Row">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </td>
+      `;
+      potTbody.appendChild(tr);
+    });
+
+    document.querySelectorAll('.pot-input').forEach(input => {
+      const handleUpdate = (e) => {
+        const idx = parseInt(e.target.dataset.idx, 10);
+        const field = e.target.dataset.field;
+        potData[idx][field] = parseFloat(e.target.value) || 0;
+        calculatePotentiometry();
+      };
+      input.addEventListener('input', handleUpdate);
+      input.addEventListener('change', handleUpdate);
+    });
+
+    document.querySelectorAll('.pot-del').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(btn.dataset.idx, 10);
+        if (potData.length > 4) {
+          potData.splice(idx, 1);
+          renderPotTable();
+          calculatePotentiometry();
+          playLabTone('click');
+        }
+      });
+    });
+  }
+
+  function calculatePotentiometry() {
+    if (!potData || potData.length < 3) return;
+
+    potData.sort((a, b) => a.v - b.v);
+
+    let maxDeriv = 0;
+    let peakIndex = 1;
+    const derivData = [];
+
+    for (let i = 1; i < potData.length; i++) {
+      const dv = potData[i].v - potData[i - 1].v;
+      const de = potData[i].e - potData[i - 1].e;
+      const vMean = (potData[i].v + potData[i - 1].v) / 2;
+      const deriv = dv > 0 ? (de / dv) : 0;
+      
+      derivData.push({ x: vMean, y: deriv });
+
+      if (deriv > maxDeriv) {
+        maxDeriv = deriv;
+        peakIndex = i;
+      }
+    }
+
+    // Equivalent volume V1: midpoint of the step with maximum ΔE/ΔV
+    const v1 = (potData[peakIndex].v + potData[peakIndex - 1].v) / 2;
+
+    const n1 = parseFloat(potNormKmno4.value) || 0.10;
+    // Syllabus formula: N2 = (N1 * V1) / 20.0
+    // Iron concentration (g/L) = N2 * 55.85
+    const n2 = (n1 * v1) / 20.0;
+    const ironConc = n2 * 55.85;
+
+    // UI Updates
+    potV1Badge.textContent = `${v1.toFixed(2)} mL`;
+    potDerivMaxBadge.textContent = `${maxDeriv.toFixed(1)} mV/mL`;
+
+    resPotV1.textContent = v1.toFixed(2);
+    resPotN2.textContent = n2.toFixed(4);
+    resPotIronStr.textContent = ironConc.toFixed(4);
+
+    calcPotStep1.innerHTML = `N₂ = (${n1.toFixed(2)} N × ${v1.toFixed(2)} mL) / 20.0 mL = <span class="text-[#3C4E26] font-bold">${n2.toFixed(4)} N</span>`;
+    calcPotStep2.innerHTML = `Concentration = ${n2.toFixed(4)} N × 55.85 = <span class="text-[#66541D] font-bold">${ironConc.toFixed(4)} g/L</span>`;
+
+    updatePotCharts(derivData, v1, maxDeriv);
+  }
+
+  function updatePotCharts(derivData, v1, maxDeriv) {
+    const canvasEmf = document.getElementById('chart-pot-emf');
+    const canvasDeriv = document.getElementById('chart-pot-deriv');
+    if (!canvasEmf || !canvasDeriv) return;
+
+    if (typeof Chart === 'undefined') {
+      drawFallbackScatter(
+        canvasEmf,
+        potData.map(p => ({ x: p.v, y: p.e })),
+        [],
+        { x: v1, y: 720, label: 'V₁ Inflection' },
+        'Vol KMnO₄ (mL)',
+        'EMF (mV)'
+      );
+      drawFallbackScatter(
+        canvasDeriv,
+        derivData,
+        [],
+        { x: v1, y: maxDeriv, label: 'Peak' },
+        'Vol KMnO₄ (mL)',
+        'ΔE/ΔV (mV/mL)'
+      );
+      return;
+    }
+
+    const ctxEmf = canvasEmf.getContext('2d');
+    const ctxDeriv = canvasDeriv.getContext('2d');
+
+    // Chart 1: Sigmoidal EMF Curve
+    const configEmf = {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: 'EMF (mV)',
+            data: potData.map(p => ({ x: p.v, y: p.e })),
+            borderColor: PALETTE.sage,
+            backgroundColor: 'rgba(142, 166, 107, 0.18)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBackgroundColor: PALETTE.sage,
+            pointBorderColor: PALETTE.border,
+            pointBorderWidth: 1.5
+          },
+          {
+            label: 'Equivalence Inflection',
+            data: [{ x: v1, y: 720 }],
+            borderColor: PALETTE.cream,
+            backgroundColor: PALETTE.rose,
+            pointRadius: 7,
+            pointBorderWidth: 2,
+            pointBorderColor: PALETTE.cream,
+            showLine: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: PALETTE.sagedark,
+            titleColor: '#FFFFFF',
+            bodyColor: PALETTE.cream,
+            borderColor: PALETTE.border,
+            borderWidth: 1,
+            callbacks: {
+              label: (c) => `EMF: ${c.parsed.y} mV at ${c.parsed.x.toFixed(2)} mL`
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'linear',
+            title: { display: true, text: 'Vol KMnO₄ (mL)', color: PALETTE.sagedark, font: { family: 'JetBrains Mono', size: 10, weight: 'bold' } },
+            grid: { color: 'rgba(142, 166, 107, 0.12)' },
+            ticks: { color: PALETTE.sagedark, font: { family: 'JetBrains Mono', size: 10 } }
+          },
+          y: {
+            title: { display: true, text: 'EMF (mV)', color: PALETTE.sagedark, font: { family: 'JetBrains Mono', size: 10, weight: 'bold' } },
+            grid: { color: 'rgba(142, 166, 107, 0.12)' },
+            ticks: { color: PALETTE.sagedark, font: { family: 'JetBrains Mono', size: 10 } }
+          }
+        }
+      }
+    };
+
+    if (chartPotEmf) {
+      chartPotEmf.data = configEmf.data;
+      chartPotEmf.options = configEmf.options;
+      chartPotEmf.update();
+    } else {
+      chartPotEmf = new Chart(ctxEmf, configEmf);
+    }
+
+    // Chart 2: First Derivative Curve (ΔE/ΔV)
+    const configDeriv = {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: 'ΔE / ΔV (mV/mL)',
+            data: derivData,
+            borderColor: PALETTE.rose,
+            backgroundColor: 'rgba(255, 220, 220, 0.45)',
+            fill: true,
+            tension: 0.25,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBackgroundColor: PALETTE.rose,
+            pointBorderColor: PALETTE.border,
+            pointBorderWidth: 1.5
+          },
+          {
+            label: 'Peak Maximum (V₁)',
+            data: [{ x: v1, y: maxDeriv }],
+            borderColor: PALETTE.cream,
+            backgroundColor: PALETTE.sage,
+            pointRadius: 8,
+            pointBorderWidth: 2,
+            pointBorderColor: PALETTE.cream,
+            showLine: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: PALETTE.sagedark,
+            titleColor: '#FFFFFF',
+            bodyColor: PALETTE.cream,
+            borderColor: PALETTE.border,
+            borderWidth: 1,
+            callbacks: {
+              label: (c) => `ΔE/ΔV: ${c.parsed.y.toFixed(1)} mV/mL at ${c.parsed.x.toFixed(2)} mL`
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'linear',
+            title: { display: true, text: 'Vol KMnO₄ (mL)', color: PALETTE.sagedark, font: { family: 'JetBrains Mono', size: 10, weight: 'bold' } },
+            grid: { color: 'rgba(142, 166, 107, 0.12)' },
+            ticks: { color: PALETTE.sagedark, font: { family: 'JetBrains Mono', size: 10 } }
+          },
+          y: {
+            title: { display: true, text: 'ΔE / ΔV (mV/mL)', color: PALETTE.sagedark, font: { family: 'JetBrains Mono', size: 10, weight: 'bold' } },
+            grid: { color: 'rgba(142, 166, 107, 0.12)' },
+            ticks: { color: PALETTE.sagedark, font: { family: 'JetBrains Mono', size: 10 } }
+          }
+        }
+      }
+    };
+
+    if (chartPotDeriv) {
+      chartPotDeriv.data = configDeriv.data;
+      chartPotDeriv.options = configDeriv.options;
+      chartPotDeriv.update();
+    } else {
+      chartPotDeriv = new Chart(ctxDeriv, configDeriv);
+    }
+  }
+
+  if (potBtnExportEmfPng) {
+    potBtnExportEmfPng.addEventListener('click', () => {
+      downloadCanvasAsPNG('chart-pot-emf', 'ChemLab_Exp4_EMF_Sigmoidal_Curve.png', 'Potentiometric Titration: Fe²⁺ vs KMnO₄ (Sigmoidal EMF Curve)');
+    });
+  }
+
+  if (potBtnExportDerivPng) {
+    potBtnExportDerivPng.addEventListener('click', () => {
+      downloadCanvasAsPNG('chart-pot-deriv', 'ChemLab_Exp4_Derivative_Peak_Curve.png', 'Potentiometric Titration: First Derivative Spike (ΔE/ΔV)');
+    });
+  }
+
+  potAddRowBtn.addEventListener('click', () => {
+    const last = potData[potData.length - 1];
+    const newV = last ? last.v + 1.0 : 0.0;
+    const newE = last ? last.e + 20 : 400;
+    potData.push({ v: newV, e: newE });
+    renderPotTable();
+    calculatePotentiometry();
+    playLabTone('click');
+  });
+
+  potClearBtn.addEventListener('click', () => {
+    potData = [];
+    renderPotTable();
+    playLabTone('click');
+  });
+
+  potLoadBtn.addEventListener('click', () => {
+    potData = JSON.parse(JSON.stringify(defaultPotData));
+    renderPotTable();
+    calculatePotentiometry();
+    playLabTone('click');
+  });
+
+  potResetBtn.addEventListener('click', () => {
+    potNormKmno4.value = 0.10;
+    potData = JSON.parse(JSON.stringify(defaultPotData));
+    renderPotTable();
+    calculatePotentiometry();
+    playLabTone('click');
+  });
+
+  potNormKmno4.addEventListener('input', calculatePotentiometry);
+
+  // View Switchers for Potentiometry
+  potBtnSplit.addEventListener('click', () => {
+    potChartsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+    potChart1Box.classList.remove('hidden');
+    potChart2Box.classList.remove('hidden');
+    potBtnSplit.className = 'px-2.5 py-1 rounded-lg bg-[#8EA66B] text-white font-semibold transition shadow-sm';
+    potBtnEmf.className = 'px-2.5 py-1 rounded-lg text-[#5C6B4F] hover:text-[#3C4E26] transition';
+    potBtnDeriv.className = 'px-2.5 py-1 rounded-lg text-[#5C6B4F] hover:text-[#3C4E26] transition';
+    if (chartPotEmf) chartPotEmf.resize();
+    if (chartPotDeriv) chartPotDeriv.resize();
+  });
+
+  potBtnEmf.addEventListener('click', () => {
+    potChartsContainer.className = 'grid grid-cols-1 gap-4';
+    potChart1Box.classList.remove('hidden');
+    potChart2Box.classList.add('hidden');
+    potBtnEmf.className = 'px-2.5 py-1 rounded-lg bg-[#8EA66B] text-white font-semibold transition shadow-sm';
+    potBtnSplit.className = 'px-2.5 py-1 rounded-lg text-[#5C6B4F] hover:text-[#3C4E26] transition';
+    potBtnDeriv.className = 'px-2.5 py-1 rounded-lg text-[#5C6B4F] hover:text-[#3C4E26] transition';
+    if (chartPotEmf) chartPotEmf.resize();
+  });
+
+  potBtnDeriv.addEventListener('click', () => {
+    potChartsContainer.className = 'grid grid-cols-1 gap-4';
+    potChart1Box.classList.add('hidden');
+    potChart2Box.classList.remove('hidden');
+    potBtnDeriv.className = 'px-2.5 py-1 rounded-lg bg-[#8EA66B] text-white font-semibold transition shadow-sm';
+    potBtnSplit.className = 'px-2.5 py-1 rounded-lg text-[#5C6B4F] hover:text-[#3C4E26] transition';
+    potBtnEmf.className = 'px-2.5 py-1 rounded-lg text-[#5C6B4F] hover:text-[#3C4E26] transition';
+    if (chartPotDeriv) chartPotDeriv.resize();
+  });
+
+  // Initialize Module 4
+  renderPotTable();
+  calculatePotentiometry();
+
 
 });

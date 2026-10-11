@@ -125,6 +125,14 @@
         <span>Conductometry (Mixture of Acids)</span>
       </button>
 
+      <!-- Tab 4: Potentiometry Fe2+ -->
+      <button class="nav-tab flex items-center gap-2 px-3.5 py-2.5 rounded-lg text-xs sm:text-sm font-medium text-[#5C6B4F] hover:text-[#3C4E26] hover:bg-white transition border border-transparent whitespace-nowrap" data-tab="tab-potentiometry">
+        <span class="w-2 h-2 rounded-full bg-[#BCCD9E] indicator-dot"></span>
+        <span class="font-mono text-[11px]">EXP 04</span>
+        <span>Potentiometry (Fe²⁺ vs KMnO₄)</span>
+      </button>
+
+    </div>
   </nav>
 
   <!-- Main Work Area Container -->
@@ -1057,6 +1065,291 @@
     <!-- ========================================================================= -->
     <!-- MODULE 4: POTENTIOMETRIC TITRATION (Fe2+ using KMnO4)                     -->
     <!-- ========================================================================= -->
+    <section id="tab-potentiometry" class="tab-content hidden space-y-6 animate-fadeIn">
+      
+      <!-- Module Header Card -->
+      <div class="bg-gradient-to-r from-white via-[#F1F6EC] to-[#FFF9D6]/40 border border-[#E5DEC9] rounded-2xl p-5 sm:p-6 shadow-sm relative overflow-hidden">
+        <div class="absolute -right-8 -top-8 w-48 h-48 bg-[#FFDCDC]/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-[#8EA66B] text-white">LAB EXPERIMENT 04</span>
+              <span class="text-xs text-[#5C6B4F] font-medium">Redox Potentiometric Analysis</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold text-[#3C4E26] tracking-tight">Potentiometric Titration of Ferrous Iron (Fe²⁺) using Standard KMnO₄</h2>
+            <p class="text-sm text-[#5C6B4F] mt-1 max-w-3xl">
+              Equivalence point detection using Saturated Calomel Electrode (SCE) - Platinum redox cell with real-time automatic derivative analysis (ΔE/ΔV) and dual sigmoidal-spike plots.
+            </p>
+          </div>
+          
+          <div class="flex items-center gap-2 self-start md:self-auto flex-wrap">
+            <button id="pot-btn-load" class="px-3 py-1.5 rounded-lg bg-[#FFF9D6] hover:bg-[#FFF3BF] border border-[#E5DEC9] text-xs font-semibold text-[#66541D] transition flex items-center gap-1.5 shadow-sm">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              <span>Load Standard Fe²⁺ Data</span>
+            </button>
+            <button id="pot-btn-reset" class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#F1F6EC] border border-[#E5DEC9] text-xs font-semibold text-[#3C4E26] transition shadow-sm">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: Parameters & Comprehensive Derivative Table (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+          
+          <!-- Parameters Card -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2 pb-2 border-b border-[#E5DEC9]">
+              <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+              Potentiometric Parameters
+            </h3>
+
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <label class="block text-xs font-semibold text-slate-800 mb-1">Volume of Fe²⁺ taken (V₂)</label>
+                <div class="relative">
+                  <input type="number" id="pot-vol-fe" value="20" readonly class="w-full bg-[#F3EFE6] border border-[#E5DEC9] rounded-xl px-3 py-2 font-mono text-slate-800 text-sm cursor-not-allowed">
+                  <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">mL</span>
+                </div>
+                <span class="text-[10px] text-[#5C6B4F]">Aliquot in beaker</span>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-800 mb-1">Normality of KMnO₄ (N₁)</label>
+                <div class="relative">
+                  <input type="number" id="pot-norm-kmno4" step="0.01" min="0.01" max="2" value="0.10" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white rounded-xl px-3 py-2 font-mono text-[#3C4E26] text-sm font-bold">
+                  <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">N</span>
+                </div>
+                <span class="text-[10px] text-[#5C6B4F]">Standard titrant (0.1 N)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Automated Derivative Observation Table with Peak Highlighting -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-[#E5DEC9] flex-wrap gap-2">
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26]">Titration & Derivative Table</h3>
+                <p class="text-[11px] text-[#5C6B4F]">ΔE, ΔV & ΔE/ΔV are calculated on the fly. Max peak highlighted.</p>
+              </div>
+              <div class="flex gap-1.5 flex-wrap">
+                <button id="pot-btn-import" class="px-2.5 py-1 bg-[#FFDCDC] hover:bg-[#FCD2D2] text-xs font-mono font-semibold text-[#8B4242] rounded border border-[#D8A2A2] transition shadow-sm flex items-center gap-1" title="Import from Excel or CSV">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                  <span>Import Data</span>
+                </button>
+                <button id="pot-add-row" class="px-2.5 py-1 bg-[#F1F6EC] hover:bg-[#E3EDD8] text-xs font-mono font-semibold text-[#3C4E26] rounded border border-[#BCCD9E] transition shadow-sm">
+                  + Add Point
+                </button>
+                <button id="pot-clear-rows" class="px-2.5 py-1 bg-white hover:bg-rose-50 text-xs font-mono text-[#5C6B4F] hover:text-rose-600 rounded border border-[#E5DEC9] transition">
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <!-- Scrollable Table -->
+            <div class="max-h-80 overflow-y-auto rounded-xl border border-[#E5DEC9] bg-white">
+              <table class="w-full text-left text-xs font-mono">
+                <thead class="sticky top-0 bg-[#F3EFE6] text-[#3C4E26] font-bold uppercase text-[10px] border-b border-[#E5DEC9]">
+                  <tr>
+                    <th class="p-2 w-8 text-center">#</th>
+                    <th class="p-2">V (mL)</th>
+                    <th class="p-2">EMF (mV)</th>
+                    <th class="p-2">ΔV</th>
+                    <th class="p-2">ΔE</th>
+                    <th class="p-2 text-[#3C4E26]">ΔE/ΔV</th>
+                    <th class="p-2 w-8"></th>
+                  </tr>
+                </thead>
+                <tbody id="pot-tbody" class="divide-y divide-[#E5DEC9]">
+                  <!-- Injected via JavaScript with dynamic pot-peak-row styling -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Peak Callout Card -->
+            <div class="p-3 rounded-xl bg-[#FFF9D6] border border-[#E5DEC9] text-xs space-y-1 text-slate-800">
+              <div class="text-[#66541D] font-bold flex items-center gap-1.5 font-mono">
+                <span class="w-2 h-2 rounded-full bg-[#8EA66B]"></span>
+                <span>Inflection & Derivative Peak Principle:</span>
+              </div>
+              <p class="text-[11px] leading-relaxed">
+                The equivalence volume is located at the peak of <span class="font-mono font-bold text-[#3C4E26]">(ΔE / ΔV)ₘₐₓ</span>. The rate of potential change reaches an instantaneous mathematical maximum when Fe²⁺ is quantitatively oxidized to Fe³⁺.
+              </p>
+            </div>
+
+            <!-- Principle & Nernst Equation Card -->
+            <div class="bg-[#FFFEF5] p-3 rounded-xl border border-[#FFF9D6] text-[11px] text-slate-800 space-y-1">
+              <div class="text-[#66541D] font-bold flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span>Redox Principle & Nernst Formulation:</span>
+              </div>
+              <p>
+                Cell: <span class="font-mono text-[#3C4E26] font-bold">SCE || Fe³⁺, Fe²⁺ | Pt</span>. The potential is governed by:
+              </p>
+              <div class="bg-white p-2 rounded border border-[#E5DEC9] font-mono text-[11px] text-[#3C4E26] font-bold shadow-inner">
+                E = E°(Fe³⁺/Fe²⁺) + (0.0591 / 1) · log([Fe³⁺] / [Fe²⁺]) - E(SCE)
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Right: Dual Chart View & Calculations (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Chart Header & Mode Toggle -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#E5DEC9]">
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#8EA66B]"></span>
+                  <span id="pot-chart-title">Sigmoidal EMF & First Derivative Curves</span>
+                </h3>
+                <span class="text-xs text-[#5C6B4F]">Electrochemical inflection pinpointing</span>
+              </div>
+
+              <!-- Controls: Mode Switcher & Export -->
+              <div class="flex items-center gap-2 flex-wrap">
+                <!-- Export Buttons -->
+                <button id="pot-btn-export-emf-png" class="px-2.5 py-1 bg-white hover:bg-[#F1F6EC] border border-[#BCCD9E] text-xs font-mono text-[#3C4E26] rounded-lg transition flex items-center gap-1 shadow-sm" title="Export EMF Curve PNG">
+                  <span>📸 EMF PNG</span>
+                </button>
+                <button id="pot-btn-export-deriv-png" class="px-2.5 py-1 bg-white hover:bg-[#F1F6EC] border border-[#BCCD9E] text-xs font-mono text-[#3C4E26] rounded-lg transition flex items-center gap-1 shadow-sm" title="Export Peak Derivative Curve PNG">
+                  <span>📸 Peak PNG</span>
+                </button>
+
+                <!-- Chart Mode Switcher Buttons -->
+                <div class="flex items-center gap-1 bg-[#F3EFE6] p-1 rounded-xl border border-[#E5DEC9] text-xs font-mono">
+                  <button id="pot-btn-view-split" class="px-2.5 py-1 rounded-lg bg-[#8EA66B] text-white font-semibold transition shadow-sm">
+                    Split View
+                  </button>
+                  <button id="pot-btn-view-emf" class="px-2.5 py-1 rounded-lg text-[#5C6B4F] hover:text-[#3C4E26] transition">
+                    EMF Curve
+                  </button>
+                  <button id="pot-btn-view-deriv" class="px-2.5 py-1 rounded-lg text-[#5C6B4F] hover:text-[#3C4E26] transition">
+                    ΔE/ΔV Peak
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart Canvas Container -->
+            <div id="pot-charts-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Chart 1: Sigmoidal EMF vs Volume -->
+              <div id="pot-chart1-box" class="space-y-1">
+                <div class="text-xs font-mono text-[#5C6B4F] font-semibold flex justify-between px-1">
+                  <span>(a) Sigmoidal Curve [E vs V]</span>
+                  <span class="text-[#3C4E26]">EMF (mV)</span>
+                </div>
+                <div class="relative h-64 w-full bg-white rounded-xl p-2 border border-[#E5DEC9] shadow-inner">
+                  <canvas id="chart-pot-emf"></canvas>
+                </div>
+              </div>
+
+              <!-- Chart 2: First Derivative ΔE/ΔV vs Volume -->
+              <div id="pot-chart2-box" class="space-y-1">
+                <div class="text-xs font-mono text-[#5C6B4F] font-semibold flex justify-between px-1">
+                  <span>(b) 1st Derivative Peak [ΔE/ΔV vs V]</span>
+                  <span class="text-[#9E5B5B]">ΔE/ΔV (mV/mL)</span>
+                </div>
+                <div class="relative h-64 w-full bg-white rounded-xl p-2 border border-[#E5DEC9] shadow-inner">
+                  <canvas id="chart-pot-deriv"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Equivalence Point Marker Bar -->
+            <div class="p-2.5 rounded-xl bg-slate-50 border border-[#E5DEC9] flex flex-wrap items-center justify-between text-xs font-mono gap-2">
+              <div class="text-[#3C4E26] flex items-center gap-1.5 font-bold">
+                <span class="w-2 h-2 rounded-full bg-[#8EA66B] animate-pulse"></span>
+                <span>Peak Equivalence Point (V₁):</span>
+                <strong id="pot-v1-badge" class="text-sm font-bold text-[#3C4E26] ml-1">10.00 mL</strong>
+              </div>
+              <div class="text-[#66541D] font-bold">
+                <span>Maximum (ΔE/ΔV)ₘₐₓ = </span>
+                <span id="pot-deriv-max-badge">250.0 mV/mL</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Result Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <!-- Card 1: Equivalence Volume V1 -->
+            <div class="bg-gradient-to-br from-white to-[#F1F6EC] border border-[#BCCD9E] rounded-2xl p-4 shadow-sm">
+              <div class="text-xs text-[#5C6B4F] font-bold">Equivalence Volume (V₁)</div>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="res-pot-v1" class="text-3xl font-extrabold font-mono text-[#3C4E26]">10.00</span>
+                <span class="text-xs font-mono text-[#5C6B4F]">mL</span>
+              </div>
+              <p class="text-[11px] text-[#5C6B4F] mt-2 border-t border-[#E5DEC9] pt-2 font-mono">
+                From ΔE/ΔV peak maximum
+              </p>
+            </div>
+
+            <!-- Card 2: Normality of Fe2+ -->
+            <div class="bg-gradient-to-br from-white to-[#FFF9D6]/30 border border-[#FFF9D6] rounded-2xl p-4 shadow-sm">
+              <div class="text-xs text-[#5C6B4F] font-bold">Normality of Fe²⁺ (N₂)</div>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="res-pot-n2" class="text-3xl font-extrabold font-mono text-[#66541D]">0.0500</span>
+                <span class="text-xs font-mono text-[#5C6B4F]">N</span>
+              </div>
+              <p class="text-[11px] text-[#5C6B4F] mt-2 border-t border-[#E5DEC9] pt-2 font-mono">
+                N₂ = (N₁ × V₁) / 20
+              </p>
+            </div>
+
+            <!-- Card 3: Iron Concentration (g/L) -->
+            <div class="bg-gradient-to-br from-white to-[#FFDCDC]/30 border border-[#D8A2A2] rounded-2xl p-4 shadow-sm">
+              <div class="text-xs text-[#5C6B4F] font-bold">Iron Concentration</div>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span id="res-pot-iron-str" class="text-3xl font-extrabold font-mono text-[#8B4242]">2.7925</span>
+                <span class="text-xs font-mono text-[#5C6B4F]">g/L</span>
+              </div>
+              <p class="text-[11px] text-[#5C6B4F] mt-2 border-t border-[#D8A2A2] pt-2 font-mono">
+                Conc = N₂ × 55.85 g/L
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Step-by-Step Manual Formula Verification Box -->
+          <div class="bg-white border border-[#E5DEC9] rounded-2xl p-5 shadow-sm space-y-3">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-[#3C4E26] flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Calculation Steps (Syllabus Formula)
+            </h3>
+            
+            <div class="space-y-2 font-mono text-xs">
+              <div class="p-3 rounded-xl bg-slate-50 border border-[#E5DEC9] text-slate-800 space-y-1">
+                <div class="text-[#3C4E26] font-bold">1. Normality of Ferrous Solution (Fe²⁺):</div>
+                <div class="text-[#5C6B4F] text-[11px]">N₁ × V₁ = N₂ × V₂ &nbsp;⟹&nbsp; N₂ = (N₁ × V₁) / V₂ &nbsp; (where V₂ = 20 mL)</div>
+                <div id="calc-pot-step1" class="text-slate-800 text-sm pt-1">
+                  N₂ = (0.10 N × 10.00 mL) / 20.0 mL = <span class="text-[#3C4E26] font-extrabold">0.0500 N</span>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#FFF9D6]/40 border border-[#FFF9D6] text-slate-800 space-y-1">
+                <div class="text-[#66541D] font-bold">2. Amount of Iron (Fe²⁺) per Litre:</div>
+                <div class="text-[#5C6B4F] text-[11px]">Iron Concentration (g/L) = Normality (N₂) × Atomic Weight of Iron (55.85 g/mol)</div>
+                <div id="calc-pot-step2" class="text-slate-800 text-sm pt-1">
+                  Concentration = 0.0500 N × 55.85 = <span class="text-[#66541D] font-extrabold">2.7925 g/L</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
 
   <!-- Footer -->
