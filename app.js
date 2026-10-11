@@ -1030,5 +1030,406 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCondStrongTable();
   calculateCondStrong();
 
+  // --- MODULE 3: CONDUCTOMETRIC TITRATION (MIXTURE OF ACIDS: HCl + CH3COOH) ---
+  const condMixNormBase = document.getElementById('cond-mix-norm-base');
+  const condMixTbody = document.getElementById('cond-mix-tbody');
+  const condMixAddRowBtn = document.getElementById('cond-mix-add-row');
+  const condMixClearBtn = document.getElementById('cond-mix-clear-rows');
+  const condMixLoadBtn = document.getElementById('cond-mix-btn-load');
+  const condMixResetBtn = document.getElementById('cond-mix-btn-reset');
+  const condMixBtnImport = document.getElementById('cond-mix-btn-import');
+  const condMixBtnExportPng = document.getElementById('cond-mix-btn-export-png');
+
+  const condMixV2Badge = document.getElementById('cond-mix-v2-badge');
+  const condMixV4Badge = document.getElementById('cond-mix-v4-badge');
+  const condMixV2Val = document.getElementById('cond-mix-v2-val');
+  const condMixV3Val = document.getElementById('cond-mix-v3-val');
+  const condMixV4Val = document.getElementById('cond-mix-v4-val');
+
+  const resCondMixN1 = document.getElementById('res-cond-mix-n1');
+  const resCondMixStr1 = document.getElementById('res-cond-mix-str1');
+  const resCondMixN3 = document.getElementById('res-cond-mix-n3');
+  const resCondMixStr3 = document.getElementById('res-cond-mix-str3');
+
+  const calcCondMixHcl = document.getElementById('calc-cond-mix-hcl');
+  const calcCondMixCh3cooh = document.getElementById('calc-cond-mix-ch3cooh');
+
+  // Standard Lab Data for Acid Mixture:
+  const defaultMixData = [
+    { v: 0.0, c: 9.20 },
+    { v: 2.0, c: 7.10 },
+    { v: 4.0, c: 4.85 },
+    { v: 6.0, c: 2.70 }, // 1st inflection point V2 (HCl complete)
+    { v: 8.0, c: 3.10 },
+    { v: 10.0, c: 3.55 },
+    { v: 12.0, c: 4.00 },
+    { v: 14.0, c: 4.45 }, // 2nd inflection point V4 (Both acids complete)
+    { v: 16.0, c: 5.75 },
+    { v: 18.0, c: 7.15 },
+    { v: 20.0, c: 8.55 },
+    { v: 22.0, c: 9.95 }
+  ];
+
+  let condMixData = JSON.parse(JSON.stringify(defaultMixData));
+  let chartCondMix = null;
+
+  function renderCondMixTable() {
+    condMixTbody.innerHTML = '';
+    condMixData.forEach((row, index) => {
+      // Determine titration segment for didactic clarity
+      let segBadge = '<span class="text-[#3C4E26] bg-[#F1F6EC] px-1.5 py-0.5 rounded border border-[#BCCD9E] text-[10px]">HCl</span>';
+      if (row.v > 6.0 && row.v <= 14.0) {
+        segBadge = '<span class="text-[#66541D] bg-[#FFF9D6] px-1.5 py-0.5 rounded border border-[#E5DEC9] text-[10px]">CH₃COOH</span>';
+      } else if (row.v > 14.0) {
+        segBadge = '<span class="text-[#8B4242] bg-[#FFDCDC] px-1.5 py-0.5 rounded border border-[#D8A2A2] text-[10px]">Excess NaOH</span>';
+      }
+
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-[#FAF8F5] transition group';
+      tr.innerHTML = `
+        <td class="p-2 text-center text-[#5C6B4F] text-[11px]">${index + 1}</td>
+        <td class="p-2">
+          <input type="number" step="0.1" value="${row.v.toFixed(1)}" data-idx="${index}" data-field="v" class="cond-m-input table-inline-input w-20">
+        </td>
+        <td class="p-2">
+          <input type="number" step="0.01" value="${row.c.toFixed(2)}" data-idx="${index}" data-field="c" class="cond-m-input table-inline-input w-24 text-[#3C4E26] font-bold">
+        </td>
+        <td class="p-2 text-center text-[10px]">
+          ${segBadge}
+        </td>
+        <td class="p-2 text-center">
+          <button data-idx="${index}" class="cond-m-del text-slate-400 hover:text-rose-600 p-1 rounded transition opacity-0 group-hover:opacity-100" title="Delete Row">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </td>
+      `;
+      condMixTbody.appendChild(tr);
+    });
+
+    document.querySelectorAll('.cond-m-input').forEach(input => {
+      const handleUpdate = (e) => {
+        const idx = parseInt(e.target.dataset.idx, 10);
+        const field = e.target.dataset.field;
+        condMixData[idx][field] = parseFloat(e.target.value) || 0;
+        calculateCondMix();
+      };
+      input.addEventListener('input', handleUpdate);
+      input.addEventListener('change', handleUpdate);
+    });
+
+    document.querySelectorAll('.cond-m-del').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(btn.dataset.idx, 10);
+        if (condMixData.length > 4) {
+          condMixData.splice(idx, 1);
+          renderCondMixTable();
+          calculateCondMix();
+          playLabTone('click');
+        }
+      });
+    });
+  }
+
+  function calculateCondMix() {
+    if (!condMixData || condMixData.length < 5) return;
+
+    condMixData.sort((a, b) => a.v - b.v);
+
+    // Find the minimum point (end of HCl descent)
+    let minIdx = 0;
+    let minC = condMixData[0].c;
+    for (let i = 1; i < condMixData.length; i++) {
+      if (condMixData[i].c < minC) {
+        minC = condMixData[i].c;
+        minIdx = i;
+      }
+    }
+
+    // Segment 1 (HCl Descent): 0 to minIdx
+    const seg1 = condMixData.slice(0, minIdx + 1).map(p => ({ x: p.v, y: p.c }));
+    const reg1 = linearRegression(seg1);
+
+    // Segment 2 & 3: Find inflection where slope increases sharply
+    let inflection2Idx = Math.min(condMixData.length - 2, minIdx + 3);
+    let maxSlopeDiff = -1;
+
+    for (let i = minIdx + 1; i < condMixData.length - 2; i++) {
+      const slopeBefore = (condMixData[i].c - condMixData[minIdx].c) / (condMixData[i].v - condMixData[minIdx].v || 1);
+      const slopeAfter = (condMixData[condMixData.length - 1].c - condMixData[i].c) / (condMixData[condMixData.length - 1].v - condMixData[i].v || 1);
+      const diff = slopeAfter - slopeBefore;
+      if (diff > maxSlopeDiff) {
+        maxSlopeDiff = diff;
+        inflection2Idx = i;
+      }
+    }
+
+    const seg2 = condMixData.slice(minIdx, inflection2Idx + 1).map(p => ({ x: p.v, y: p.c }));
+    const seg3 = condMixData.slice(inflection2Idx).map(p => ({ x: p.v, y: p.c }));
+
+    const reg2 = linearRegression(seg2);
+    const reg3 = linearRegression(seg3);
+
+    // Intersections:
+    let v2 = 6.0, cEq1 = 2.70;
+    const inter1 = findIntersection(reg1, reg2);
+    if (inter1 && inter1.x > 0 && inter1.x < 15) {
+      v2 = inter1.x;
+      cEq1 = inter1.y;
+    } else {
+      v2 = condMixData[minIdx].v;
+    }
+
+    let v4 = 14.0, cEq2 = 4.45;
+    const inter2 = findIntersection(reg2, reg3);
+    if (inter2 && inter2.x > v2 && inter2.x < condMixData[condMixData.length - 1].v) {
+      v4 = inter2.x;
+      cEq2 = inter2.y;
+    } else {
+      v4 = condMixData[inflection2Idx].v;
+    }
+
+    // V3 = Volume consumed by acetic acid alone
+    const v3 = Math.max(0, v4 - v2);
+
+    const n2 = parseFloat(condMixNormBase.value) || 0.10;
+
+    // Syllabus formulas:
+    // HCl: N1 = (N2 * V2) / 40.0; Strength = N1 * 36.5
+    // CH3COOH: N3 = (N2 * V3) / 40.0; Strength = N3 * 60.05
+    const n1 = (n2 * v2) / 40.0;
+    const str1 = n1 * 36.5;
+
+    const n3 = (n2 * v3) / 40.0;
+    const str3 = n3 * 60.05;
+
+    // UI Updates
+    condMixV2Badge.textContent = v2.toFixed(2);
+    condMixV4Badge.textContent = v4.toFixed(2);
+    condMixV2Val.textContent = `${v2.toFixed(2)} mL`;
+    condMixV3Val.textContent = `${v3.toFixed(2)} mL`;
+    condMixV4Val.textContent = `${v4.toFixed(2)} mL`;
+
+    resCondMixN1.textContent = `${n1.toFixed(4)} N`;
+    resCondMixStr1.textContent = str1.toFixed(4);
+    resCondMixN3.textContent = `${n3.toFixed(4)} N`;
+    resCondMixStr3.textContent = str3.toFixed(4);
+
+    calcCondMixHcl.innerHTML = `N₁ = (${n2.toFixed(2)} × ${v2.toFixed(2)}) / 40 = <span class="text-[#3C4E26] font-bold">${n1.toFixed(4)} N</span>; &nbsp; Strength = ${n1.toFixed(4)} × 36.5 = <span class="text-[#3C4E26] font-bold">${str1.toFixed(4)} g/L</span>`;
+    calcCondMixCh3cooh.innerHTML = `V₃ = ${v4.toFixed(2)} - ${v2.toFixed(2)} = ${v3.toFixed(2)} mL &nbsp;⟹&nbsp; N₃ = (${n2.toFixed(2)} × ${v3.toFixed(2)}) / 40 = <span class="text-[#66541D] font-bold">${n3.toFixed(4)} N</span>; &nbsp; Strength = ${n3.toFixed(4)} × 60.05 = <span class="text-[#66541D] font-bold">${str3.toFixed(4)} g/L</span>`;
+
+    updateCondMixChart(reg1, reg2, reg3, v2, cEq1, v4, cEq2);
+  }
+
+  function updateCondMixChart(reg1, reg2, reg3, v2, cEq1, v4, cEq2) {
+    const canvas = document.getElementById('chart-cond-mix');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const minX = 0;
+    const maxX = condMixData[condMixData.length - 1].v + 2;
+
+    const datasetLine1 = [
+      { x: minX, y: reg1.m * minX + reg1.c },
+      { x: v2 + 1.2, y: reg1.m * (v2 + 1.2) + reg1.c }
+    ];
+
+    const datasetLine2 = [
+      { x: Math.max(0, v2 - 1.2), y: reg2.m * Math.max(0, v2 - 1.2) + reg2.c },
+      { x: v4 + 1.2, y: reg2.m * (v4 + 1.2) + reg2.c }
+    ];
+
+    const datasetLine3 = [
+      { x: Math.max(0, v4 - 1.2), y: reg3.m * Math.max(0, v4 - 1.2) + reg3.c },
+      { x: maxX, y: reg3.m * maxX + reg3.c }
+    ];
+
+    if (typeof Chart === 'undefined') {
+      drawFallbackScatter(
+        canvas,
+        condMixData,
+        [
+          { pts: datasetLine1, color: PALETTE.sage },
+          { pts: datasetLine2, color: PALETTE.creamdark },
+          { pts: datasetLine3, color: PALETTE.rose }
+        ],
+        { x: v2, y: cEq1, label: 'V₂ (HCl)' },
+        'Volume of 0.1 N NaOH (mL)',
+        'Conductance (mS/cm)'
+      );
+      return;
+    }
+
+    const chartConfig = {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: 'Experimental Points',
+            data: condMixData.map(p => ({ x: p.v, y: p.c })),
+            backgroundColor: PALETTE.sage,
+            borderColor: PALETTE.border,
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            pointBorderWidth: 2,
+            pointBackgroundColor: PALETTE.sage,
+            showLine: false,
+            order: 1
+          },
+          {
+            label: 'Line 1: HCl Descent',
+            data: datasetLine1,
+            borderColor: PALETTE.sagedark,
+            borderWidth: 2,
+            borderDash: [4, 4],
+            showLine: true,
+            pointRadius: 0,
+            fill: false,
+            order: 3
+          },
+          {
+            label: 'Line 2: CH₃COOH Buffer',
+            data: datasetLine2,
+            borderColor: PALETTE.creamdark,
+            borderWidth: 2,
+            borderDash: [4, 4],
+            showLine: true,
+            pointRadius: 0,
+            fill: false,
+            order: 4
+          },
+          {
+            label: 'Line 3: Excess Base Rise',
+            data: datasetLine3,
+            borderColor: PALETTE.rose,
+            borderWidth: 2,
+            borderDash: [4, 4],
+            showLine: true,
+            pointRadius: 0,
+            fill: false,
+            order: 5
+          },
+          {
+            label: 'Inflection 1 (V₂ - HCl)',
+            data: [{ x: v2, y: cEq1 }],
+            backgroundColor: PALETTE.sagedark,
+            borderColor: PALETTE.cream,
+            pointRadius: 8,
+            pointBorderWidth: 3,
+            showLine: false,
+            order: 0
+          },
+          {
+            label: 'Inflection 2 (V₄ - Total)',
+            data: [{ x: v4, y: cEq2 }],
+            backgroundColor: PALETTE.rose,
+            borderColor: PALETTE.cream,
+            pointRadius: 8,
+            pointBorderWidth: 3,
+            showLine: false,
+            order: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 250 },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: PALETTE.sagedark,
+              font: { family: 'JetBrains Mono', size: 10, weight: 'bold' },
+              boxWidth: 10
+            }
+          },
+          tooltip: {
+            backgroundColor: PALETTE.sagedark,
+            titleColor: '#FFFFFF',
+            bodyColor: PALETTE.cream,
+            borderColor: PALETTE.border,
+            borderWidth: 1,
+            callbacks: {
+              label: (ctx) => `(${ctx.parsed.x.toFixed(2)} mL, ${ctx.parsed.y.toFixed(2)} mS/cm)`
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Volume of 0.1 N NaOH Added (mL)',
+              color: PALETTE.sagedark,
+              font: { family: 'JetBrains Mono', size: 12, weight: 'bold' }
+            },
+            grid: { color: 'rgba(142, 166, 107, 0.12)' },
+            ticks: { color: PALETTE.sagedark, font: { family: 'JetBrains Mono' } }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Conductance (mS/cm)',
+              color: PALETTE.sagedark,
+              font: { family: 'JetBrains Mono', size: 12, weight: 'bold' }
+            },
+            grid: { color: 'rgba(142, 166, 107, 0.12)' },
+            ticks: { color: PALETTE.sagedark, font: { family: 'JetBrains Mono' } }
+          }
+        }
+      }
+    };
+
+    if (chartCondMix) {
+      chartCondMix.data = chartConfig.data;
+      chartCondMix.options = chartConfig.options;
+      chartCondMix.update();
+    } else {
+      chartCondMix = new Chart(ctx, chartConfig);
+    }
+  }
+
+  if (condMixBtnExportPng) {
+    condMixBtnExportPng.addEventListener('click', () => {
+      downloadCanvasAsPNG('chart-cond-mix', 'ChemLab_Exp3_AcidMixture_Curve.png', 'Conductometric Titration: Acid Mixture (HCl + CH₃COOH vs NaOH)');
+    });
+  }
+
+  condMixAddRowBtn.addEventListener('click', () => {
+    const last = condMixData[condMixData.length - 1];
+    const newV = last ? last.v + 2.0 : 0.0;
+    const newC = last ? last.c + 1.2 : 5.0;
+    condMixData.push({ v: newV, c: newC });
+    renderCondMixTable();
+    calculateCondMix();
+    playLabTone('click');
+  });
+
+  condMixClearBtn.addEventListener('click', () => {
+    condMixData = [];
+    renderCondMixTable();
+    playLabTone('click');
+  });
+
+  condMixLoadBtn.addEventListener('click', () => {
+    condMixData = JSON.parse(JSON.stringify(defaultMixData));
+    renderCondMixTable();
+    calculateCondMix();
+    playLabTone('click');
+  });
+
+  condMixResetBtn.addEventListener('click', () => {
+    condMixNormBase.value = 0.10;
+    condMixData = JSON.parse(JSON.stringify(defaultMixData));
+    renderCondMixTable();
+    calculateCondMix();
+    playLabTone('click');
+  });
+
+  condMixNormBase.addEventListener('input', calculateCondMix);
+
+  // Initialize Module 3
+  renderCondMixTable();
+  calculateCondMix();
+
 
 });

@@ -11,6 +11,9 @@ An interactive engineering chemistry laboratory calculator and virtual workbench
   * Real-time conductance plotting with OLS regression lines.
   * Equivalence point (V₂) intersection calculation.
   * Computes Normality and Strength (g/L) of HCl.
+* **Experiment 03: Conductometric Titration (Mixture of Acids: HCl + CH₃COOH vs NaOH)**
+  * Dual inflection point fitting for strong and weak acid neutralization.
+  * Calculates individual normalities and concentrations (g/L) for both acids.
 
 ## Running the Application
 Open `index.html` directly in any modern browser, or run a local server:
