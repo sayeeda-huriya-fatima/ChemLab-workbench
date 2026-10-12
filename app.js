@@ -1870,6 +1870,156 @@ document.addEventListener('DOMContentLoaded', () => {
   renderPotTable();
   calculatePotentiometry();
 
+  // --- BULK PASTE / CSV / EXCEL IMPORT MODAL CONTROLLER ---
+  const modalBulkImport = document.getElementById('modal-bulk-import');
+  const btnCloseBulkImport = document.getElementById('btn-close-bulk-import');
+  const bulkImportTargetSelect = document.getElementById('bulk-import-target-select');
+  const bulkImportTextarea = document.getElementById('bulk-import-textarea');
+  const bulkImportStatus = document.getElementById('bulk-import-status');
+  const bulkImportCount = document.getElementById('bulk-import-count');
+  const bulkImportPreviewBox = document.getElementById('bulk-import-preview-box');
+  const bulkImportPreviewTbody = document.getElementById('bulk-import-preview-tbody');
+  const btnBulkImportApply = document.getElementById('btn-bulk-import-apply');
+  const btnBulkImportAppend = document.getElementById('btn-bulk-import-append');
+  const btnBulkLoadSample = document.getElementById('btn-bulk-load-sample');
+
+  function openBulkImportModal(targetExp) {
+    if (targetExp) bulkImportTargetSelect.value = targetExp;
+    modalBulkImport.classList.remove('hidden');
+    playLabTone('click');
+    bulkImportTextarea.focus();
+  }
+
+  if (condStrongBtnImport) condStrongBtnImport.addEventListener('click', () => openBulkImportModal('cond-strong'));
+  if (condMixBtnImport) condMixBtnImport.addEventListener('click', () => openBulkImportModal('cond-mix'));
+  if (potBtnImport) potBtnImport.addEventListener('click', () => openBulkImportModal('pot'));
+
+  btnCloseBulkImport.addEventListener('click', () => {
+    modalBulkImport.classList.add('hidden');
+    playLabTone('click');
+  });
+
+  // Parse raw text pasted from spreadsheets or text files
+  function parsePastedData(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const validPoints = [];
+
+    lines.forEach(line => {
+      const clean = line.trim();
+      if (!clean) return;
+
+      // Ignore header rows containing letters like "Volume" or "Conductance"
+      if (/^[a-zA-Z#]/i.test(clean)) return;
+
+      // Split by tab, comma, semicolon, or whitespace
+      const tokens = clean.split(/[\t,;]|\s+/).filter(Boolean);
+      if (tokens.length >= 2) {
+        const v = parseFloat(tokens[0]);
+        const y = parseFloat(tokens[1]);
+        if (!isNaN(v) && !isNaN(y) && isFinite(v) && isFinite(y)) {
+          validPoints.push({ v, y });
+        }
+      }
+    });
+
+    return validPoints;
+  }
+
+  function updateBulkPreview() {
+    const points = parsePastedData(bulkImportTextarea.value);
+    bulkImportCount.textContent = `${points.length} rows detected`;
+
+    if (points.length > 0) {
+      bulkImportPreviewBox.classList.remove('hidden');
+      bulkImportStatus.className = 'p-2.5 rounded-lg bg-[#F1F6EC] border border-[#BCCD9E] text-[#3C4E26] flex items-center justify-between';
+      bulkImportStatus.firstElementChild.textContent = `Valid format: ${points.length} coordinate pairs parsed successfully.`;
+
+      bulkImportPreviewTbody.innerHTML = '';
+      points.slice(0, 20).forEach((pt, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="p-1.5 text-center text-[#5C6B4F]">${i + 1}</td>
+          <td class="p-1.5 text-[#3C4E26] font-bold">${pt.v.toFixed(2)} mL</td>
+          <td class="p-1.5 text-[#26331C]">${pt.y.toFixed(2)}</td>
+        `;
+        bulkImportPreviewTbody.appendChild(tr);
+      });
+      if (points.length > 20) {
+        const trMore = document.createElement('tr');
+        trMore.innerHTML = `<td colspan="3" class="p-1 text-center text-[#5C6B4F] italic">+ ${points.length - 20} more rows...</td>`;
+        bulkImportPreviewTbody.appendChild(trMore);
+      }
+    } else {
+      bulkImportPreviewBox.classList.add('hidden');
+      bulkImportStatus.className = 'p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E5DEC9] text-[#5C6B4F] flex items-center justify-between';
+      bulkImportStatus.firstElementChild.textContent = 'Paste spreadsheet columns above to preview.';
+    }
+  }
+
+  bulkImportTextarea.addEventListener('input', updateBulkPreview);
+
+  btnBulkLoadSample.addEventListener('click', () => {
+    const target = bulkImportTargetSelect.value;
+    if (target === 'cond-strong') {
+      bulkImportTextarea.value = "0.0\t8.42\n2.0\t7.15\n4.0\t5.86\n6.0\t4.60\n8.0\t3.35\n10.0\t2.10\n12.0\t3.12\n14.0\t4.16\n16.0\t5.20\n18.0\t6.25\n20.0\t7.30";
+    } else if (target === 'cond-mix') {
+      bulkImportTextarea.value = "0.0\t9.20\n2.0\t7.10\n4.0\t4.85\n6.0\t2.70\n8.0\t3.10\n10.0\t3.55\n12.0\t4.00\n14.0\t4.45\n16.0\t5.75\n18.0\t7.15\n20.0\t8.55\n22.0\t9.95";
+    } else {
+      bulkImportTextarea.value = "0.0\t380\n2.0\t405\n4.0\t430\n6.0\t458\n8.0\t490\n9.0\t520\n9.5\t550\n9.8\t590\n10.0\t720\n10.2\t840\n10.5\t875\n11.0\t895\n12.0\t915\n14.0\t935";
+    }
+    updateBulkPreview();
+    playLabTone('click');
+  });
+
+  btnBulkImportApply.addEventListener('click', () => {
+    const points = parsePastedData(bulkImportTextarea.value);
+    if (!points.length) {
+      alert('Please paste at least two valid numeric columns (Volume and Reading).');
+      return;
+    }
+
+    const target = bulkImportTargetSelect.value;
+    if (target === 'cond-strong') {
+      condStrongData = points.map(p => ({ v: p.v, c: p.y }));
+      renderCondStrongTable();
+      calculateCondStrong();
+    } else if (target === 'cond-mix') {
+      condMixData = points.map(p => ({ v: p.v, c: p.y }));
+      renderCondMixTable();
+      calculateCondMix();
+    } else if (target === 'pot') {
+      potData = points.map(p => ({ v: p.v, e: p.y }));
+      renderPotTable();
+      calculatePotentiometry();
+    }
+
+    modalBulkImport.classList.add('hidden');
+    playLabTone('endpoint');
+  });
+
+  btnBulkImportAppend.addEventListener('click', () => {
+    const points = parsePastedData(bulkImportTextarea.value);
+    if (!points.length) return;
+
+    const target = bulkImportTargetSelect.value;
+    if (target === 'cond-strong') {
+      points.forEach(p => condStrongData.push({ v: p.v, c: p.y }));
+      renderCondStrongTable();
+      calculateCondStrong();
+    } else if (target === 'cond-mix') {
+      points.forEach(p => condMixData.push({ v: p.v, c: p.y }));
+      renderCondMixTable();
+      calculateCondMix();
+    } else if (target === 'pot') {
+      points.forEach(p => potData.push({ v: p.v, e: p.y }));
+      renderPotTable();
+      calculatePotentiometry();
+    }
+
+    modalBulkImport.classList.add('hidden');
+    playLabTone('click');
+  });
+
   // --- ARCHITECTURE & NUMERICAL METHODS MODAL CONTROLLER ---
   const modalArchitecture = document.getElementById('modal-architecture');
   const btnOpenArch = document.getElementById('btn-open-arch');

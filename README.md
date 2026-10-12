@@ -23,6 +23,10 @@ An interactive engineering chemistry laboratory calculator and virtual workbench
 * **Viva Practice:** 20 high-frequency viva voce questions covering indicators, buffer choices, ion mobilities, and electrode pairs.
 * **Theory Reference:** Standard formulas, ionic reaction mechanisms, and academic references.
 
+## Data Input
+* **Bulk Spreadsheet Import:** Paste two-column TSV/CSV data from Excel or notes directly into data tables.
+* **Inline Editing:** Double-click any cell to edit readings directly.
+
 ## Running the Application
 Open `index.html` directly in any modern browser, or run a local server:
 ```bash
