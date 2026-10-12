@@ -1,8 +1,6 @@
 /* ChemLab Workbench - Laboratory Calculator Styles */
 
 :root {
-  --primary: #0284c7;
-  --accent: #38bdf8;
   --ch-sage: #8EA66B;
   --ch-sage-dark: #3C4E26;
   --ch-sage-light: #F1F6EC;
@@ -209,4 +207,5 @@ input[type="number"]:hover::-webkit-outer-spin-button {
   background-color: #FFF0F0 !important;
   border-left: 3px solid #D8A2A2 !important;
 }
+
 

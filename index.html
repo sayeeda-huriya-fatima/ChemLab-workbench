@@ -55,7 +55,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚗️</text></svg>">
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans selection:bg-[#FFDCDC] selection:text-[#3C4E26] antialiased">
+<body class="bg-[#FAF8F5] text-[#26331C] min-h-screen flex flex-col font-sans selection:bg-[#FFDCDC] selection:text-[#3C4E26] antialiased">
 
   <!-- Header -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5DEC9] px-4 lg:px-8 py-3 shadow-sm transition-all">
@@ -64,7 +64,7 @@
       <!-- Brand & Title -->
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#8EA66B] via-[#BCCD9E] to-[#FFDCDC] flex items-center justify-center shadow-md shadow-[#8EA66B]/20 ring-1 ring-[#8EA66B]/30">
-          <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-[#26331C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
           </svg>
         </div>
@@ -206,7 +206,7 @@
                 Burette Rundown Inputs
               </h3>
               <!-- Sample Preset Selector -->
-              <select id="edta-preset-select" class="bg-slate-50 border border-[#E5DEC9] text-xs rounded-lg px-2.5 py-1 text-[#3C4E26] font-medium focus:outline-none focus:border-[#8EA66B]">
+              <select id="edta-preset-select" class="bg-[#FAF8F5] border border-[#E5DEC9] text-xs rounded-lg px-2.5 py-1 text-[#3C4E26] font-medium focus:outline-none focus:border-[#8EA66B]">
                 <option value="preset-tap">Preset: Municipal Tap Water</option>
                 <option value="preset-borewell">Preset: Borewell Hard Water</option>
                 <option value="preset-river">Preset: River Sample</option>
@@ -220,14 +220,14 @@
               <!-- V1 Input -->
               <div>
                 <div class="flex justify-between items-center mb-1">
-                  <label for="edta-v1" class="font-semibold text-slate-800 flex items-center gap-1.5">
+                  <label for="edta-v1" class="font-semibold text-[#26331C] flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-[#8EA66B]"></span>
                     <span>V₁ (EDTA for Std Hard Water)</span>
                   </label>
                   <span class="text-xs font-mono text-[#5C6B4F]">50 mL sample</span>
                 </div>
                 <div class="relative">
-                  <input type="number" id="edta-v1" step="0.1" min="1" max="100" value="18.5" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white focus:ring-1 focus:ring-[#BCCD9E] rounded-xl px-3 py-2.5 font-mono text-[#3C4E26] text-base font-bold transition">
+                  <input type="number" id="edta-v1" step="0.1" min="1" max="100" value="18.5" class="w-full bg-[#FAF8F5] border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white focus:ring-1 focus:ring-[#BCCD9E] rounded-xl px-3 py-2.5 font-mono text-[#3C4E26] text-base font-bold transition">
                   <span class="absolute right-3 top-2.5 text-xs text-[#5C6B4F] font-mono font-medium">mL</span>
                 </div>
                 <p class="text-[11px] text-[#5C6B4F] mt-1">EDTA volume consumed to titrate 50 mL standard hard water (1 mg CaCO₃/mL).</p>
@@ -236,14 +236,14 @@
               <!-- V2 Input -->
               <div>
                 <div class="flex justify-between items-center mb-1">
-                  <label for="edta-v2" class="font-semibold text-slate-800 flex items-center gap-1.5">
+                  <label for="edta-v2" class="font-semibold text-[#26331C] flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-[#D8A2A2]"></span>
                     <span>V₂ (EDTA for Sample Water)</span>
                   </label>
                   <span class="text-xs font-mono text-[#5C6B4F]">50 mL sample</span>
                 </div>
                 <div class="relative">
-                  <input type="number" id="edta-v2" step="0.1" min="1" max="100" value="23.2" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white focus:ring-1 focus:ring-[#BCCD9E] rounded-xl px-3 py-2.5 font-mono text-[#3C4E26] text-base font-bold transition">
+                  <input type="number" id="edta-v2" step="0.1" min="1" max="100" value="23.2" class="w-full bg-[#FAF8F5] border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white focus:ring-1 focus:ring-[#BCCD9E] rounded-xl px-3 py-2.5 font-mono text-[#3C4E26] text-base font-bold transition">
                   <span class="absolute right-3 top-2.5 text-xs text-[#5C6B4F] font-mono font-medium">mL</span>
                 </div>
                 <p class="text-[11px] text-[#5C6B4F] mt-1">EDTA volume consumed to titrate 50 mL untreated sample water (Total Hardness).</p>
@@ -252,14 +252,14 @@
               <!-- V3 Input -->
               <div>
                 <div class="flex justify-between items-center mb-1">
-                  <label for="edta-v3" class="font-semibold text-slate-800 flex items-center gap-1.5">
+                  <label for="edta-v3" class="font-semibold text-[#26331C] flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-[#8EA66B]"></span>
                     <span>V₃ (EDTA for Boiled Water)</span>
                   </label>
                   <span class="text-xs font-mono text-[#5C6B4F]">50 mL boiled & filtered</span>
                 </div>
                 <div class="relative">
-                  <input type="number" id="edta-v3" step="0.1" min="0" max="100" value="11.4" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white focus:ring-1 focus:ring-[#BCCD9E] rounded-xl px-3 py-2.5 font-mono text-[#3C4E26] text-base font-bold transition">
+                  <input type="number" id="edta-v3" step="0.1" min="0" max="100" value="11.4" class="w-full bg-[#FAF8F5] border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white focus:ring-1 focus:ring-[#BCCD9E] rounded-xl px-3 py-2.5 font-mono text-[#3C4E26] text-base font-bold transition">
                   <span class="absolute right-3 top-2.5 text-xs text-[#5C6B4F] font-mono font-medium">mL</span>
                 </div>
                 <p class="text-[11px] text-[#5C6B4F] mt-1">EDTA volume consumed to titrate 50 mL boiled & filtered sample (Permanent Hardness).</p>
@@ -345,7 +345,7 @@
             </div>
 
             <!-- Indicator Complexation Principle -->
-            <div class="bg-[#FFFEF5] rounded-xl p-3 border border-[#FFF9D6] text-[12px] space-y-1.5 text-slate-800">
+            <div class="bg-[#FFFEF5] rounded-xl p-3 border border-[#FFF9D6] text-[12px] space-y-1.5 text-[#26331C]">
               <div class="text-[#66541D] font-bold flex items-center gap-1.5">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#8EA66B]"></span>
                 <span>Indicator Complexation Principle:</span>
@@ -465,7 +465,7 @@
                   <span>1. Total Hardness of Sample Water:</span>
                   <span class="text-[#5C6B4F] font-normal">Formula: (V₂ / V₁) × 1000 mg/L</span>
                 </div>
-                <div class="text-slate-800 text-[13px] pt-1" id="step-total-calc">
+                <div class="text-[#26331C] text-[13px] pt-1" id="step-total-calc">
                   = (<span class="text-[#8EA66B] font-bold">23.2</span> / <span class="text-[#3C4E26] font-bold">18.5</span>) × 1000 = <span class="text-[#3C4E26] font-extrabold">1254.05 mg/L</span> (ppm CaCO₃ eq)
                 </div>
               </div>
@@ -476,7 +476,7 @@
                   <span>2. Permanent Hardness (Non-Carbonate Hardness):</span>
                   <span class="text-[#5C6B4F] font-normal">Formula: (V₃ / V₁) × 1000 mg/L</span>
                 </div>
-                <div class="text-slate-800 text-[13px] pt-1" id="step-perm-calc">
+                <div class="text-[#26331C] text-[13px] pt-1" id="step-perm-calc">
                   = (<span class="text-[#66541D] font-bold">11.4</span> / <span class="text-[#3C4E26] font-bold">18.5</span>) × 1000 = <span class="text-[#66541D] font-extrabold">616.22 mg/L</span> (ppm CaCO₃ eq)
                 </div>
               </div>
@@ -487,7 +487,7 @@
                   <span>3. Temporary Hardness (Carbonate Hardness):</span>
                   <span class="text-[#5C6B4F] font-normal">Formula: Total - Permanent Hardness</span>
                 </div>
-                <div class="text-slate-800 text-[13px] pt-1" id="step-temp-calc">
+                <div class="text-[#26331C] text-[13px] pt-1" id="step-temp-calc">
                   = <span class="text-[#3C4E26] font-bold">1254.05</span> - <span class="text-[#66541D] font-bold">616.22</span> = <span class="text-[#8B4242] font-extrabold">637.83 mg/L</span> (ppm CaCO₃ eq)
                 </div>
               </div>
@@ -548,18 +548,18 @@
 
             <div class="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <label class="block text-xs font-semibold text-slate-800 mb-1">Volume of HCl taken (V)</label>
+                <label class="block text-xs font-semibold text-[#26331C] mb-1">Volume of HCl taken (V)</label>
                 <div class="relative">
-                  <input type="number" id="cond-strong-vol-acid" value="40" readonly class="w-full bg-[#F3EFE6] border border-[#E5DEC9] rounded-xl px-3 py-2 font-mono text-slate-800 text-sm cursor-not-allowed">
+                  <input type="number" id="cond-strong-vol-acid" value="40" readonly class="w-full bg-[#F3EFE6] border border-[#E5DEC9] rounded-xl px-3 py-2 font-mono text-[#26331C] text-sm cursor-not-allowed">
                   <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">mL</span>
                 </div>
                 <span class="text-[10px] text-[#5C6B4F]">Fixed syllabus volume</span>
               </div>
 
               <div>
-                <label class="block text-xs font-semibold text-slate-800 mb-1">Normality of NaOH (N₂)</label>
+                <label class="block text-xs font-semibold text-[#26331C] mb-1">Normality of NaOH (N₂)</label>
                 <div class="relative">
-                  <input type="number" id="cond-strong-norm-base" step="0.01" min="0.01" max="5" value="0.10" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white rounded-xl px-3 py-2 font-mono text-[#3C4E26] text-sm font-bold">
+                  <input type="number" id="cond-strong-norm-base" step="0.01" min="0.01" max="5" value="0.10" class="w-full bg-[#FAF8F5] border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white rounded-xl px-3 py-2 font-mono text-[#3C4E26] text-sm font-bold">
                   <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">N</span>
                 </div>
                 <span class="text-[10px] text-[#5C6B4F]">Titrant in burette</span>
@@ -614,13 +614,13 @@
             </div>
 
             <!-- Ion Mobility Theory Pill -->
-            <div class="bg-[#FFFEF5] p-3 rounded-xl border border-[#FFF9D6] text-[11px] text-slate-800 space-y-1">
+            <div class="bg-[#FFFEF5] p-3 rounded-xl border border-[#FFF9D6] text-[11px] text-[#26331C] space-y-1">
               <div class="text-[#66541D] font-bold flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 <span>Electrolytic Mobility Theory:</span>
               </div>
               <p>
-                Initial conductance is high due to fast <span class="text-[#3C4E26] font-mono font-bold">H⁺</span> (λ° = 349.8 S·cm²/mol). As NaOH is added, H⁺ is replaced by slower <span class="text-slate-800 font-mono font-bold">Na⁺</span> (λ° = 50.1), causing linear drop. Past neutralization (V₂), excess <span class="text-[#8EA66B] font-mono font-bold">OH⁻</span> (λ° = 198.6) causes sharp linear rise.
+                Initial conductance is high due to fast <span class="text-[#3C4E26] font-mono font-bold">H⁺</span> (λ° = 349.8 S·cm²/mol). As NaOH is added, H⁺ is replaced by slower <span class="text-[#26331C] font-mono font-bold">Na⁺</span> (λ° = 50.1), causing linear drop. Past neutralization (V₂), excess <span class="text-[#8EA66B] font-mono font-bold">OH⁻</span> (λ° = 198.6) causes sharp linear rise.
               </p>
             </div>
 
@@ -636,7 +636,7 @@
               <span class="text-xs px-2 py-0.5 rounded bg-[#FFF9D6] text-[#66541D] font-mono font-semibold border border-[#E5DEC9]">Interactive</span>
             </div>
 
-            <div class="flex items-center justify-around p-3 bg-slate-50 rounded-xl border border-[#E5DEC9]">
+            <div class="flex items-center justify-around p-3 bg-[#FAF8F5] rounded-xl border border-[#E5DEC9]">
               <!-- Burette graphic -->
               <div class="flex flex-col items-center">
                 <div class="text-[10px] font-mono text-[#5C6B4F] mb-1">Burette (NaOH)</div>
@@ -723,11 +723,11 @@
 
             <!-- Legend and Regression Formulas -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 text-[11px] font-mono border-t border-[#E5DEC9]">
-              <div class="p-2 rounded bg-slate-50 border border-[#E5DEC9] text-[#3C4E26]">
+              <div class="p-2 rounded bg-[#FAF8F5] border border-[#E5DEC9] text-[#3C4E26]">
                 <span class="text-[#5C6B4F]">Descending Arm (HCl): </span>
                 <span id="cond-strong-reg-desc" class="font-bold">y = -0.584x + 7.95 (R² = 0.998)</span>
               </div>
-              <div class="p-2 rounded bg-slate-50 border border-[#E5DEC9] text-[#9E5B5B]">
+              <div class="p-2 rounded bg-[#FAF8F5] border border-[#E5DEC9] text-[#9E5B5B]">
                 <span class="text-[#5C6B4F]">Ascending Arm (NaOH): </span>
                 <span id="cond-strong-reg-asc" class="font-bold">y = 0.512x - 3.01 (R² = 0.997)</span>
               </div>
@@ -745,12 +745,12 @@
               <span class="text-xs font-mono text-[#5C6B4F] bg-[#FFF9D6] px-2 py-0.5 rounded border border-[#E5DEC9]">Exact Proof</span>
             </div>
 
-            <div class="space-y-2 font-mono text-xs text-slate-800">
+            <div class="space-y-2 font-mono text-xs text-[#26331C]">
               <p class="text-[#5C6B4F]">
                 Equivalence volume <span class="font-bold text-[#3C4E26]">V₂</span> is solved analytically at the intersection of the two least-squares regression lines:
               </p>
               
-              <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] space-y-1.5">
+              <div class="bg-[#FAF8F5] p-3 rounded-xl border border-[#E5DEC9] space-y-1.5">
                 <div>• Arm 1 (Descending): <span class="font-bold text-[#3C4E26]" id="deriv-strong-line1">y = m₁x + c₁</span></div>
                 <div>• Arm 2 (Ascending): <span class="font-bold text-[#9E5B5B]" id="deriv-strong-line2">y = m₂x + c₂</span></div>
                 <div class="border-t border-[#E5DEC9] pt-1.5 font-bold text-[#3C4E26]" id="deriv-strong-algebra">
@@ -812,18 +812,18 @@
             </h3>
             
             <div class="space-y-2 font-mono text-xs">
-              <div class="p-3 rounded-xl bg-slate-50 border border-[#E5DEC9] text-slate-800 space-y-1">
+              <div class="p-3 rounded-xl bg-[#FAF8F5] border border-[#E5DEC9] text-[#26331C] space-y-1">
                 <div class="text-[#3C4E26] font-bold">1. Normality of Hydrochloric Acid:</div>
                 <div class="text-[#5C6B4F] text-[11px]">N₁ × V₁ = N₂ × V₂ &nbsp;⟹&nbsp; N₁ = (N₂ × V₂) / V₁</div>
-                <div id="calc-cond-strong-step1" class="text-slate-800 text-sm pt-1">
+                <div id="calc-cond-strong-step1" class="text-[#26331C] text-sm pt-1">
                   N₁ = (0.10 N × 10.00 mL) / 40.0 mL = <span class="text-[#3C4E26] font-extrabold">0.0250 N</span>
                 </div>
               </div>
 
-              <div class="p-3 rounded-xl bg-[#FFF9D6]/40 border border-[#FFF9D6] text-slate-800 space-y-1">
+              <div class="p-3 rounded-xl bg-[#FFF9D6]/40 border border-[#FFF9D6] text-[#26331C] space-y-1">
                 <div class="text-[#66541D] font-bold">2. Strength of Hydrochloric Acid Solution:</div>
                 <div class="text-[#5C6B4F] text-[11px]">Strength (g/L) = Normality (N₁) × Equivalent Weight of HCl (36.5 g/equiv)</div>
-                <div id="calc-cond-strong-step2" class="text-slate-800 text-sm pt-1">
+                <div id="calc-cond-strong-step2" class="text-[#26331C] text-sm pt-1">
                   Strength = 0.0250 N × 36.5 = <span class="text-[#66541D] font-extrabold">0.9125 g/L</span>
                 </div>
               </div>
@@ -883,18 +883,18 @@
 
             <div class="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <label class="block text-xs font-semibold text-slate-800 mb-1">Volume of Acid Mix (V)</label>
+                <label class="block text-xs font-semibold text-[#26331C] mb-1">Volume of Acid Mix (V)</label>
                 <div class="relative">
-                  <input type="number" id="cond-mix-vol-mix" value="40" readonly class="w-full bg-[#F3EFE6] border border-[#E5DEC9] rounded-xl px-3 py-2 font-mono text-slate-800 text-sm cursor-not-allowed">
+                  <input type="number" id="cond-mix-vol-mix" value="40" readonly class="w-full bg-[#F3EFE6] border border-[#E5DEC9] rounded-xl px-3 py-2 font-mono text-[#26331C] text-sm cursor-not-allowed">
                   <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">mL</span>
                 </div>
                 <span class="text-[10px] text-[#5C6B4F]">Fixed syllabus volume</span>
               </div>
 
               <div>
-                <label class="block text-xs font-semibold text-slate-800 mb-1">Normality of NaOH (N₂)</label>
+                <label class="block text-xs font-semibold text-[#26331C] mb-1">Normality of NaOH (N₂)</label>
                 <div class="relative">
-                  <input type="number" id="cond-mix-norm-base" step="0.01" min="0.01" max="5" value="0.10" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white rounded-xl px-3 py-2 font-mono text-[#3C4E26] text-sm font-bold">
+                  <input type="number" id="cond-mix-norm-base" step="0.01" min="0.01" max="5" value="0.10" class="w-full bg-[#FAF8F5] border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white rounded-xl px-3 py-2 font-mono text-[#3C4E26] text-sm font-bold">
                   <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">N</span>
                 </div>
                 <span class="text-[10px] text-[#5C6B4F]">Standardized titrant</span>
@@ -942,12 +942,12 @@
             </div>
 
             <!-- Theory explanation -->
-            <div class="bg-[#FFFEF5] p-3 rounded-xl border border-[#FFF9D6] text-[11px] text-slate-800 space-y-1">
+            <div class="bg-[#FFFEF5] p-3 rounded-xl border border-[#FFF9D6] text-[11px] text-[#26331C] space-y-1">
               <div class="text-[#66541D] font-bold flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                 <span>3-Stage Conductance Profile:</span>
               </div>
-              <ol class="list-decimal list-inside space-y-1 text-slate-800 pl-1">
+              <ol class="list-decimal list-inside space-y-1 text-[#26331C] pl-1">
                 <li><strong class="text-[#3C4E26]">0 to V₂ (HCl):</strong> High mobility H⁺ ions neutralized; conductance plunges linearly.</li>
                 <li><strong class="text-[#66541D]">V₂ to V₄ (CH₃COOH):</strong> Poorly ionized CH₃COOH forms CH₃COONa buffer; conductance gently rises/plateaus.</li>
                 <li><strong class="text-[#8B4242]">&gt; V₄ (Excess Base):</strong> Highly mobile OH⁻ accumulates; conductance climbs steeply.</li>
@@ -993,7 +993,7 @@
             </div>
 
             <!-- Volume breakdown bar -->
-            <div class="p-2.5 rounded-xl bg-slate-50 border border-[#E5DEC9] flex flex-wrap items-center justify-between text-xs font-mono gap-2">
+            <div class="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E5DEC9] flex flex-wrap items-center justify-between text-xs font-mono gap-2">
               <div class="text-[#3C4E26]">
                 <span>V₂ (HCl) = </span>
                 <span id="cond-mix-v2-val" class="font-bold">6.00 mL</span>
@@ -1065,16 +1065,16 @@
             </h3>
             
             <div class="space-y-2 font-mono text-xs">
-              <div class="p-3 rounded-xl bg-slate-50 border border-[#E5DEC9] space-y-1">
+              <div class="p-3 rounded-xl bg-[#FAF8F5] border border-[#E5DEC9] space-y-1">
                 <div class="text-[#3C4E26] font-bold">1. For Hydrochloric Acid (HCl):</div>
-                <div id="calc-cond-mix-hcl" class="text-slate-800 text-[12px]">
+                <div id="calc-cond-mix-hcl" class="text-[#26331C] text-[12px]">
                   N₁ = (0.10 × 6.00) / 40 = <span class="text-[#3C4E26] font-bold">0.0150 N</span>; &nbsp; Strength = 0.0150 × 36.5 = <span class="text-[#3C4E26] font-bold">0.5475 g/L</span>
                 </div>
               </div>
 
               <div class="p-3 rounded-xl bg-[#FFF9D6]/40 border border-[#FFF9D6] space-y-1">
                 <div class="text-[#66541D] font-bold">2. For Acetic Acid (CH₃COOH):</div>
-                <div id="calc-cond-mix-ch3cooh" class="text-slate-800 text-[12px]">
+                <div id="calc-cond-mix-ch3cooh" class="text-[#26331C] text-[12px]">
                   V₃ = 14.00 - 6.00 = 8.00 mL &nbsp;⟹&nbsp; N₃ = (0.10 × 8.00) / 40 = <span class="text-[#66541D] font-bold">0.0200 N</span>; &nbsp; Strength = 0.0200 × 60.05 = <span class="text-[#66541D] font-bold">1.2010 g/L</span>
                 </div>
               </div>
@@ -1134,18 +1134,18 @@
 
             <div class="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <label class="block text-xs font-semibold text-slate-800 mb-1">Volume of Fe²⁺ taken (V₂)</label>
+                <label class="block text-xs font-semibold text-[#26331C] mb-1">Volume of Fe²⁺ taken (V₂)</label>
                 <div class="relative">
-                  <input type="number" id="pot-vol-fe" value="20" readonly class="w-full bg-[#F3EFE6] border border-[#E5DEC9] rounded-xl px-3 py-2 font-mono text-slate-800 text-sm cursor-not-allowed">
+                  <input type="number" id="pot-vol-fe" value="20" readonly class="w-full bg-[#F3EFE6] border border-[#E5DEC9] rounded-xl px-3 py-2 font-mono text-[#26331C] text-sm cursor-not-allowed">
                   <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">mL</span>
                 </div>
                 <span class="text-[10px] text-[#5C6B4F]">Aliquot in beaker</span>
               </div>
 
               <div>
-                <label class="block text-xs font-semibold text-slate-800 mb-1">Normality of KMnO₄ (N₁)</label>
+                <label class="block text-xs font-semibold text-[#26331C] mb-1">Normality of KMnO₄ (N₁)</label>
                 <div class="relative">
-                  <input type="number" id="pot-norm-kmno4" step="0.01" min="0.01" max="2" value="0.10" class="w-full bg-slate-50 border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white rounded-xl px-3 py-2 font-mono text-[#3C4E26] text-sm font-bold">
+                  <input type="number" id="pot-norm-kmno4" step="0.01" min="0.01" max="2" value="0.10" class="w-full bg-[#FAF8F5] border border-[#E5DEC9] focus:border-[#8EA66B] focus:bg-white rounded-xl px-3 py-2 font-mono text-[#3C4E26] text-sm font-bold">
                   <span class="absolute right-3 top-2 text-xs text-[#5C6B4F] font-mono">N</span>
                 </div>
                 <span class="text-[10px] text-[#5C6B4F]">Standard titrant (0.1 N)</span>
@@ -1195,7 +1195,7 @@
             </div>
 
             <!-- Peak Callout Card -->
-            <div class="p-3 rounded-xl bg-[#FFF9D6] border border-[#E5DEC9] text-xs space-y-1 text-slate-800">
+            <div class="p-3 rounded-xl bg-[#FFF9D6] border border-[#E5DEC9] text-xs space-y-1 text-[#26331C]">
               <div class="text-[#66541D] font-bold flex items-center gap-1.5 font-mono">
                 <span class="w-2 h-2 rounded-full bg-[#8EA66B]"></span>
                 <span>Inflection & Derivative Peak Principle:</span>
@@ -1206,7 +1206,7 @@
             </div>
 
             <!-- Principle & Nernst Equation Card -->
-            <div class="bg-[#FFFEF5] p-3 rounded-xl border border-[#FFF9D6] text-[11px] text-slate-800 space-y-1">
+            <div class="bg-[#FFFEF5] p-3 rounded-xl border border-[#FFF9D6] text-[11px] text-[#26331C] space-y-1">
               <div class="text-[#66541D] font-bold flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 <span>Redox Principle & Nernst Formulation:</span>
@@ -1288,7 +1288,7 @@
             </div>
 
             <!-- Equivalence Point Marker Bar -->
-            <div class="p-2.5 rounded-xl bg-slate-50 border border-[#E5DEC9] flex flex-wrap items-center justify-between text-xs font-mono gap-2">
+            <div class="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E5DEC9] flex flex-wrap items-center justify-between text-xs font-mono gap-2">
               <div class="text-[#3C4E26] flex items-center gap-1.5 font-bold">
                 <span class="w-2 h-2 rounded-full bg-[#8EA66B] animate-pulse"></span>
                 <span>Peak Equivalence Point (V₁):</span>
@@ -1351,18 +1351,18 @@
             </h3>
             
             <div class="space-y-2 font-mono text-xs">
-              <div class="p-3 rounded-xl bg-slate-50 border border-[#E5DEC9] text-slate-800 space-y-1">
+              <div class="p-3 rounded-xl bg-[#FAF8F5] border border-[#E5DEC9] text-[#26331C] space-y-1">
                 <div class="text-[#3C4E26] font-bold">1. Normality of Ferrous Solution (Fe²⁺):</div>
                 <div class="text-[#5C6B4F] text-[11px]">N₁ × V₁ = N₂ × V₂ &nbsp;⟹&nbsp; N₂ = (N₁ × V₁) / V₂ &nbsp; (where V₂ = 20 mL)</div>
-                <div id="calc-pot-step1" class="text-slate-800 text-sm pt-1">
+                <div id="calc-pot-step1" class="text-[#26331C] text-sm pt-1">
                   N₂ = (0.10 N × 10.00 mL) / 20.0 mL = <span class="text-[#3C4E26] font-extrabold">0.0500 N</span>
                 </div>
               </div>
 
-              <div class="p-3 rounded-xl bg-[#FFF9D6]/40 border border-[#FFF9D6] text-slate-800 space-y-1">
+              <div class="p-3 rounded-xl bg-[#FFF9D6]/40 border border-[#FFF9D6] text-[#26331C] space-y-1">
                 <div class="text-[#66541D] font-bold">2. Amount of Iron (Fe²⁺) per Litre:</div>
                 <div class="text-[#5C6B4F] text-[11px]">Iron Concentration (g/L) = Normality (N₂) × Atomic Weight of Iron (55.85 g/mol)</div>
-                <div id="calc-pot-step2" class="text-slate-800 text-sm pt-1">
+                <div id="calc-pot-step2" class="text-[#26331C] text-sm pt-1">
                   Concentration = 0.0500 N × 55.85 = <span class="text-[#66541D] font-extrabold">2.7925 g/L</span>
                 </div>
               </div>
@@ -1399,7 +1399,7 @@
     <div class="bg-white border border-[#E5DEC9] rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden my-auto">
       
       <!-- Viva Header -->
-      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-slate-50">
+      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-[#FAF8F5]">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-[#FFF9D6] border border-[#E5DEC9] flex items-center justify-center text-[#66541D]">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -1418,7 +1418,7 @@
       <div class="px-6 py-3 border-b border-[#E5DEC9] bg-white flex flex-wrap items-center justify-between gap-2 text-xs">
         <div class="flex items-center gap-2">
           <span class="text-[#5C6B4F] font-semibold">Filter Topic:</span>
-          <select id="viva-filter" class="bg-slate-50 border border-[#E5DEC9] text-[#3C4E26] font-semibold rounded px-2.5 py-1 text-xs">
+          <select id="viva-filter" class="bg-[#FAF8F5] border border-[#E5DEC9] text-[#3C4E26] font-semibold rounded px-2.5 py-1 text-xs">
             <option value="all">All Experiments (20 Questions)</option>
             <option value="edta">EDTA Hardness</option>
             <option value="conductometry">Conductometric Titrations</option>
@@ -1445,9 +1445,9 @@
           </h4>
 
           <!-- Reveal Answer Box -->
-          <div id="viva-answer-box" class="hidden mt-4 pt-4 border-t border-[#E5DEC9] text-sm text-slate-800 space-y-2 animate-fadeIn bg-white p-3.5 rounded-xl border border-[#E5DEC9]">
+          <div id="viva-answer-box" class="hidden mt-4 pt-4 border-t border-[#E5DEC9] text-sm text-[#26331C] space-y-2 animate-fadeIn bg-white p-3.5 rounded-xl border border-[#E5DEC9]">
             <span class="text-xs uppercase tracking-wider text-[#3C4E26] font-extrabold block font-mono">Answer & Explanation:</span>
-            <p id="viva-answer-text" class="leading-relaxed text-slate-800">
+            <p id="viva-answer-text" class="leading-relaxed text-[#26331C]">
               At pH 9–10, the [Ca/Mg-EBT] complex remains stable yet less stable than the [Ca/Mg-EDTA] complex, allowing EDTA to displace EBT cleanly at the equivalence point. Below pH 9, the indicator remains predominantly red (H₂In⁻); above pH 10, Mg(OH)₂ precipitates.
             </p>
           </div>
@@ -1478,7 +1478,7 @@
     <div class="bg-white border border-[#E5DEC9] rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden my-auto">
       
       <!-- Theory Header -->
-      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-slate-50">
+      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-[#FAF8F5]">
         <div class="flex items-center gap-2">
           <svg class="w-5 h-5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
           <h3 class="text-base font-bold text-[#3C4E26]">Lab Manual & Formula Reference</h3>
@@ -1489,7 +1489,7 @@
       </div>
 
       <!-- Theory Scrollable Content -->
-      <div class="p-6 overflow-y-auto flex-1 space-y-6 text-sm text-slate-800">
+      <div class="p-6 overflow-y-auto flex-1 space-y-6 text-sm text-[#26331C]">
         
         <!-- Section 1 -->
         <div class="space-y-2 border-b border-[#E5DEC9] pb-4">
@@ -1497,7 +1497,7 @@
           <p>
             Hardness is caused by dissolved polyvalent metallic cations, predominantly Ca²⁺ and Mg²⁺. EDTA (Disodium dihydrogen ethylenediaminetetraacetate) is a hexadentate chelating agent forming 1:1 octahedral complexes.
           </p>
-          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
+          <div class="bg-[#FAF8F5] p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
             <div>• Total Hardness = (V₂ / V₁) × 1000 mg/L (ppm)</div>
             <div>• Permanent Hardness = (V₃ / V₁) × 1000 mg/L (ppm)</div>
             <div>• Temporary Hardness = Total Hardness - Permanent Hardness</div>
@@ -1510,7 +1510,7 @@
           <p>
             Based on Ohm's law and ion mobilities. Conductance depends on number and ionic velocity of ions.
           </p>
-          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
+          <div class="bg-[#FAF8F5] p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
             <div>• N₁ = (N₂ × V₂) / 40.0</div>
             <div>• Strength of HCl (g/L) = N₁ × 36.5</div>
           </div>
@@ -1522,7 +1522,7 @@
           <p>
             Fractional titration where strong acid (HCl) is neutralized first due to suppression of acetic acid ionization by common ion effect (H⁺). Once HCl is completely consumed at V₂, CH₃COOH neutralizes up to V₄.
           </p>
-          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
+          <div class="bg-[#FAF8F5] p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
             <div>• HCl: N₁ = (N₂ × V₂) / 40.0; &nbsp; Strength = N₁ × 36.5 g/L</div>
             <div>• CH₃COOH: V₃ = V₄ - V₂; &nbsp; N₃ = (N₂ × V₃) / 40.0; &nbsp; Strength = N₃ × 60.05 g/L</div>
           </div>
@@ -1534,7 +1534,7 @@
           <p>
             Redox titration monitored via EMF of a galvanic cell. Equivalence point coincides with the inflection of the potential curve and the maximum spike in the first derivative ΔE/ΔV curve.
           </p>
-          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
+          <div class="bg-[#FAF8F5] p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
             <div>• Normality of Fe²⁺: N₂ = (N₁ × V₁) / 20.0</div>
             <div>• Iron Concentration (g/L) = N₂ × 55.85</div>
           </div>
@@ -1552,7 +1552,7 @@
     <div class="bg-white border border-[#E5DEC9] rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden my-auto">
       
       <!-- Header -->
-      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-slate-50">
+      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-[#FAF8F5]">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-[#F1F6EC] border border-[#BCCD9E] flex items-center justify-center text-[#3C4E26]">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
@@ -1568,7 +1568,7 @@
       </div>
 
       <!-- Content -->
-      <div class="p-6 overflow-y-auto flex-1 space-y-6 text-sm text-slate-800 leading-relaxed">
+      <div class="p-6 overflow-y-auto flex-1 space-y-6 text-sm text-[#26331C] leading-relaxed">
         
         <!-- Algorithmic Section 1 -->
         <div class="space-y-2 border-b border-[#E5DEC9] pb-4">
@@ -1579,7 +1579,7 @@
           <p class="text-xs text-[#5C6B4F]">
             The conductometry curves fit separate linear lines to the descending and ascending titration arms. Slope (m) and intercept (c) are solved via standard least squares:
           </p>
-          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs text-[#3C4E26] space-y-1">
+          <div class="bg-[#FAF8F5] p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs text-[#3C4E26] space-y-1">
             <div>m = (N ∑xy - ∑x ∑y) / (N ∑x² - (∑x)²)</div>
             <div>c = (∑y - m ∑x) / N</div>
             <div>R² = 1 - (SS_res / SS_tot)</div>
@@ -1595,7 +1595,7 @@
           <p class="text-xs text-[#5C6B4F]">
             The equivalence volume V_eq is found algebraically at the intersection of the two straight lines:
           </p>
-          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs text-[#3C4E26] space-y-1">
+          <div class="bg-[#FAF8F5] p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs text-[#3C4E26] space-y-1">
             <div>m₁x + c₁ = m₂x + c₂ &nbsp;⟹&nbsp; x = (c₂ - c₁) / (m₁ - m₂)</div>
             <div>y = m₁(x) + c₁</div>
           </div>
@@ -1613,7 +1613,7 @@
           <p class="text-xs text-[#5C6B4F]">
             For potentiometric redox titration, the electrochemical inflection point is located where the rate of change is maximized:
           </p>
-          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs text-[#3C4E26] space-y-1">
+          <div class="bg-[#FAF8F5] p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs text-[#3C4E26] space-y-1">
             <div>(ΔE / ΔV)_i = (E_i - E_{i-1}) / (V_i - V_{i-1})</div>
             <div>V_peak = (V_i + V_{i-1}) / 2 &nbsp;at &nbsp;max(ΔE / ΔV)</div>
           </div>
@@ -1628,7 +1628,7 @@
           <p class="text-xs text-[#5C6B4F]">
             Built with standard HTML5, CSS, and vanilla JavaScript:
           </p>
-          <ul class="list-disc list-inside text-xs text-slate-800 space-y-1 font-mono">
+          <ul class="list-disc list-inside text-xs text-[#26331C] space-y-1 font-mono">
             <li>Reactive updates: changing table rows recalculates values and updates plots immediately.</li>
             <li>Embedded HTML5 Canvas 2D fallback renderer ensures graphs display even without internet.</li>
             <li>All computations run locally in the browser with zero external backend dependencies.</li>
