@@ -19,6 +19,10 @@ An interactive engineering chemistry laboratory calculator and virtual workbench
   * Peak spike identification for equivalence volume.
   * Computes Normality of Fe²⁺ and Iron strength (g/L).
 
+## Viva Practice & Theory Reference
+* **Viva Practice:** 20 high-frequency viva voce questions covering indicators, buffer choices, ion mobilities, and electrode pairs.
+* **Theory Reference:** Standard formulas, ionic reaction mechanisms, and academic references.
+
 ## Running the Application
 Open `index.html` directly in any modern browser, or run a local server:
 ```bash

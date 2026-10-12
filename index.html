@@ -96,6 +96,31 @@
           <span class="hidden md:inline text-[11px] font-mono">Audio</span>
         </button>
 
+        <!-- Mathematical Methods Modal Trigger -->
+        <button id="btn-open-arch" class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#F1F6EC] border border-[#E5DEC9] text-xs font-semibold text-[#3C4E26] flex items-center gap-1.5 transition shadow-sm" title="View Mathematical Methods & Regression Formulas">
+          <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+          </svg>
+          <span class="hidden lg:inline">Math & Methods</span>
+        </button>
+
+        <!-- Viva Practice Modal Trigger (#FFF9D6 Cream Accent) -->
+        <button id="btn-open-viva" class="px-3 py-1.5 rounded-lg bg-[#FFF9D6] hover:bg-[#FFF3BF] border border-[#E5DEC9] text-xs font-semibold text-[#66541D] flex items-center gap-1.5 transition shadow-sm">
+          <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Viva Practice</span>
+          <span class="bg-[#3C4E26] text-white text-[10px] px-1.5 py-0.2 rounded-full font-mono">20 Qs</span>
+        </button>
+
+        <!-- Lab Manual / Theory Drawer -->
+        <button id="btn-open-theory" class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#F1F6EC] border border-[#E5DEC9] text-xs font-semibold text-[#3C4E26] flex items-center gap-1.5 transition shadow-sm">
+          <svg class="w-4 h-4 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span class="hidden sm:inline">Lab Manual</span>
+        </button>
+
 
     </div>
   </header>
@@ -1370,6 +1395,251 @@
   <!-- ========================================================================= -->
   <!-- MODAL 1: PRINT LAB OBSERVATION SHEET (A4 RECORD BOOK FORMAT)              -->
   <!-- ========================================================================= -->
+  <div id="modal-viva" class="fixed inset-0 z-50 bg-[#26331C]/40 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="bg-white border border-[#E5DEC9] rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden my-auto">
+      
+      <!-- Viva Header -->
+      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-[#FFF9D6] border border-[#E5DEC9] flex items-center justify-center text-[#66541D]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-[#3C4E26]">Engineering Chemistry Viva Practice</h3>
+            <p class="text-xs text-[#5C6B4F] font-medium">High-frequency questions asked in university practical examinations</p>
+          </div>
+        </div>
+        <button id="btn-close-viva" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Viva Filter & Progress -->
+      <div class="px-6 py-3 border-b border-[#E5DEC9] bg-white flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="text-[#5C6B4F] font-semibold">Filter Topic:</span>
+          <select id="viva-filter" class="bg-slate-50 border border-[#E5DEC9] text-[#3C4E26] font-semibold rounded px-2.5 py-1 text-xs">
+            <option value="all">All Experiments (20 Questions)</option>
+            <option value="edta">EDTA Hardness</option>
+            <option value="conductometry">Conductometric Titrations</option>
+            <option value="potentiometry">Potentiometric Titrations</option>
+          </select>
+        </div>
+        <div class="text-[#5C6B4F] font-mono font-semibold">
+          Question <span id="viva-current-idx" class="text-[#3C4E26] font-bold">1</span> of <span id="viva-total-count">20</span>
+        </div>
+      </div>
+
+      <!-- Active Viva Card Content -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-4">
+        
+        <!-- Card Frame -->
+        <div class="bg-gradient-to-br from-[#FAF8F5] to-[#FFF9D6]/30 border border-[#E5DEC9] rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <span id="viva-card-tag" class="text-[11px] font-mono px-2 py-0.5 rounded bg-[#F1F6EC] text-[#3C4E26] font-bold border border-[#BCCD9E]">EXP 01 • EDTA</span>
+            <span id="viva-card-diff" class="text-[11px] font-mono text-[#66541D] bg-[#FFF9D6] px-2 py-0.5 rounded border border-[#E5DEC9] font-bold">High Frequency</span>
+          </div>
+
+          <h4 id="viva-question-text" class="text-base sm:lg font-bold text-[#3C4E26] leading-relaxed">
+            Why is an ammonium chloride-ammonium hydroxide buffer solution (pH 10) added during EDTA titration?
+          </h4>
+
+          <!-- Reveal Answer Box -->
+          <div id="viva-answer-box" class="hidden mt-4 pt-4 border-t border-[#E5DEC9] text-sm text-slate-800 space-y-2 animate-fadeIn bg-white p-3.5 rounded-xl border border-[#E5DEC9]">
+            <span class="text-xs uppercase tracking-wider text-[#3C4E26] font-extrabold block font-mono">Answer & Explanation:</span>
+            <p id="viva-answer-text" class="leading-relaxed text-slate-800">
+              At pH 9–10, the [Ca/Mg-EBT] complex remains stable yet less stable than the [Ca/Mg-EDTA] complex, allowing EDTA to displace EBT cleanly at the equivalence point. Below pH 9, the indicator remains predominantly red (H₂In⁻); above pH 10, Mg(OH)₂ precipitates.
+            </p>
+          </div>
+        </div>
+
+        <!-- Viva Controls -->
+        <div class="flex items-center justify-between gap-3 pt-2">
+          <button id="viva-btn-prev" class="px-4 py-2 bg-white hover:bg-[#F1F6EC] text-[#3C4E26] text-xs font-bold rounded-xl border border-[#E5DEC9] transition shadow-sm">
+            ← Previous
+          </button>
+          <button id="viva-btn-reveal" class="px-5 py-2 bg-gradient-to-r from-[#8EA66B] to-[#6E864B] hover:from-[#789354] hover:to-[#5B713B] text-white text-xs font-bold rounded-xl shadow-md shadow-[#8EA66B]/25 transition">
+            Show Answer
+          </button>
+          <button id="viva-btn-next" class="px-4 py-2 bg-white hover:bg-[#F1F6EC] text-[#3C4E26] text-xs font-bold rounded-xl border border-[#E5DEC9] transition shadow-sm">
+            Next →
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: LAB MANUAL & EXPERIMENTAL PRINCIPLES DRAWER                      -->
+  <!-- ========================================================================= -->
+  <div id="modal-theory" class="fixed inset-0 z-50 bg-[#26331C]/40 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="bg-white border border-[#E5DEC9] rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden my-auto">
+      
+      <!-- Theory Header -->
+      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <h3 class="text-base font-bold text-[#3C4E26]">Lab Manual & Formula Reference</h3>
+        </div>
+        <button id="btn-close-theory" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Theory Scrollable Content -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-6 text-sm text-slate-800">
+        
+        <!-- Section 1 -->
+        <div class="space-y-2 border-b border-[#E5DEC9] pb-4">
+          <h4 class="text-[#3C4E26] font-bold font-mono text-base">EXP 1: EDTA Method for Hardness of Water</h4>
+          <p>
+            Hardness is caused by dissolved polyvalent metallic cations, predominantly Ca²⁺ and Mg²⁺. EDTA (Disodium dihydrogen ethylenediaminetetraacetate) is a hexadentate chelating agent forming 1:1 octahedral complexes.
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
+            <div>• Total Hardness = (V₂ / V₁) × 1000 mg/L (ppm)</div>
+            <div>• Permanent Hardness = (V₃ / V₁) × 1000 mg/L (ppm)</div>
+            <div>• Temporary Hardness = Total Hardness - Permanent Hardness</div>
+          </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="space-y-2 border-b border-[#E5DEC9] pb-4">
+          <h4 class="text-[#3C4E26] font-bold font-mono text-base">EXP 2: Conductometry (HCl vs NaOH)</h4>
+          <p>
+            Based on Ohm's law and ion mobilities. Conductance depends on number and ionic velocity of ions.
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
+            <div>• N₁ = (N₂ × V₂) / 40.0</div>
+            <div>• Strength of HCl (g/L) = N₁ × 36.5</div>
+          </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="space-y-2 border-b border-[#E5DEC9] pb-4">
+          <h4 class="text-[#3C4E26] font-bold font-mono text-base">EXP 3: Conductometry (Acid Mixture: HCl + CH₃COOH)</h4>
+          <p>
+            Fractional titration where strong acid (HCl) is neutralized first due to suppression of acetic acid ionization by common ion effect (H⁺). Once HCl is completely consumed at V₂, CH₃COOH neutralizes up to V₄.
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
+            <div>• HCl: N₁ = (N₂ × V₂) / 40.0; &nbsp; Strength = N₁ × 36.5 g/L</div>
+            <div>• CH₃COOH: V₃ = V₄ - V₂; &nbsp; N₃ = (N₂ × V₃) / 40.0; &nbsp; Strength = N₃ × 60.05 g/L</div>
+          </div>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="space-y-2">
+          <h4 class="text-[#3C4E26] font-bold font-mono text-base">EXP 4: Potentiometry (Fe²⁺ vs KMnO₄)</h4>
+          <p>
+            Redox titration monitored via EMF of a galvanic cell. Equivalence point coincides with the inflection of the potential curve and the maximum spike in the first derivative ΔE/ΔV curve.
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs space-y-1 text-[#3C4E26] font-semibold">
+            <div>• Normality of Fe²⁺: N₂ = (N₁ × V₁) / 20.0</div>
+            <div>• Iron Concentration (g/L) = N₂ × 55.85</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 4: BULK DATA IMPORT (EXCEL / CSV / TAB-SEPARATED VALUES)            -->
+  <!-- ========================================================================= -->
+  <div id="modal-architecture" class="fixed inset-0 z-50 bg-[#26331C]/40 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="bg-white border border-[#E5DEC9] rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden my-auto">
+      
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-[#F1F6EC] border border-[#BCCD9E] flex items-center justify-center text-[#3C4E26]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-[#3C4E26]">Mathematical Methods & Formulas</h3>
+            <p class="text-xs text-[#5C6B4F]">Formulas, linear regressions, and numerical differentiation methods used in calculations</p>
+          </div>
+        </div>
+        <button id="btn-close-arch" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-6 text-sm text-slate-800 leading-relaxed">
+        
+        <!-- Algorithmic Section 1 -->
+        <div class="space-y-2 border-b border-[#E5DEC9] pb-4">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#8EA66B]"></span>
+            <h4 class="font-bold text-[#3C4E26] font-mono">1. Ordinary Least Squares (OLS) Linear Regression</h4>
+          </div>
+          <p class="text-xs text-[#5C6B4F]">
+            The conductometry curves fit separate linear lines to the descending and ascending titration arms. Slope (m) and intercept (c) are solved via standard least squares:
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs text-[#3C4E26] space-y-1">
+            <div>m = (N ∑xy - ∑x ∑y) / (N ∑x² - (∑x)²)</div>
+            <div>c = (∑y - m ∑x) / N</div>
+            <div>R² = 1 - (SS_res / SS_tot)</div>
+          </div>
+        </div>
+
+        <!-- Algorithmic Section 2 -->
+        <div class="space-y-2 border-b border-[#E5DEC9] pb-4">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#D8A2A2]"></span>
+            <h4 class="font-bold text-[#3C4E26] font-mono">2. Analytical Line Intersection & Equivalence Point</h4>
+          </div>
+          <p class="text-xs text-[#5C6B4F]">
+            The equivalence volume V_eq is found algebraically at the intersection of the two straight lines:
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs text-[#3C4E26] space-y-1">
+            <div>m₁x + c₁ = m₂x + c₂ &nbsp;⟹&nbsp; x = (c₂ - c₁) / (m₁ - m₂)</div>
+            <div>y = m₁(x) + c₁</div>
+          </div>
+          <p class="text-[11px] text-[#5C6B4F]">
+            For mixture of acids (Exp 3), this is solved at both inflection boundaries to isolate HCl (V₂) and CH₃COOH (V₄ - V₂).
+          </p>
+        </div>
+
+        <!-- Algorithmic Section 3 -->
+        <div class="space-y-2 border-b border-[#E5DEC9] pb-4">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#8EA66B]"></span>
+            <h4 class="font-bold text-[#3C4E26] font-mono">3. Discrete First Derivative (ΔE / ΔV)</h4>
+          </div>
+          <p class="text-xs text-[#5C6B4F]">
+            For potentiometric redox titration, the electrochemical inflection point is located where the rate of change is maximized:
+          </p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-[#E5DEC9] font-mono text-xs text-[#3C4E26] space-y-1">
+            <div>(ΔE / ΔV)_i = (E_i - E_{i-1}) / (V_i - V_{i-1})</div>
+            <div>V_peak = (V_i + V_{i-1}) / 2 &nbsp;at &nbsp;max(ΔE / ΔV)</div>
+          </div>
+        </div>
+
+        <!-- Algorithmic Section 4 -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#66541D]"></span>
+            <h4 class="font-bold text-[#3C4E26] font-mono">4. Client-Side Implementation & Offline Support</h4>
+          </div>
+          <p class="text-xs text-[#5C6B4F]">
+            Built with standard HTML5, CSS, and vanilla JavaScript:
+          </p>
+          <ul class="list-disc list-inside text-xs text-slate-800 space-y-1 font-mono">
+            <li>Reactive updates: changing table rows recalculates values and updates plots immediately.</li>
+            <li>Embedded HTML5 Canvas 2D fallback renderer ensures graphs display even without internet.</li>
+            <li>All computations run locally in the browser with zero external backend dependencies.</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
   <!-- Application Logic Scripts -->
   <script src="app.js"></script>
 </body>

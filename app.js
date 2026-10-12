@@ -1870,5 +1870,237 @@ document.addEventListener('DOMContentLoaded', () => {
   renderPotTable();
   calculatePotentiometry();
 
+  // --- ARCHITECTURE & NUMERICAL METHODS MODAL CONTROLLER ---
+  const modalArchitecture = document.getElementById('modal-architecture');
+  const btnOpenArch = document.getElementById('btn-open-arch');
+  const btnCloseArch = document.getElementById('btn-close-arch');
+
+  if (btnOpenArch && modalArchitecture) {
+    btnOpenArch.addEventListener('click', () => {
+      modalArchitecture.classList.remove('hidden');
+      playLabTone('click');
+    });
+  }
+
+  if (btnCloseArch && modalArchitecture) {
+    btnCloseArch.addEventListener('click', () => {
+      modalArchitecture.classList.add('hidden');
+      playLabTone('click');
+    });
+  }
+
+  // --- VIVA VOCE FLASHCARDS DATABASE & INTERACTION CONTROLLER ---
+  const vivaQuestions = [
+    {
+      topic: 'edta',
+      tag: 'EXP 01 • EDTA',
+      diff: 'High Frequency',
+      q: 'Why is an ammonium chloride-ammonium hydroxide buffer solution (pH 10) added during EDTA titration?',
+      a: 'At pH 9–10, the [Ca/Mg-EBT] complex remains stable yet less stable than the [Ca/Mg-EDTA] chelate, allowing EDTA to cleanly displace EBT at equivalence. Below pH 9, the indicator remains in its red (H₂In⁻) conjugate acid form regardless of metal; above pH 10, Mg(OH)₂ precipitates.'
+    },
+    {
+      topic: 'edta',
+      tag: 'EXP 01 • EDTA',
+      diff: 'Core Concept',
+      q: 'Why does the color change from Wine Red to Clear Sky Blue at the endpoint in EDTA titration?',
+      a: 'Initially, free EBT binds traces of Ca²⁺/Mg²⁺ forming an unstable wine-red complex: M²⁺ + EBT (blue) → [M-EBT] (wine-red). During titration, EDTA preferentially chelates free metal ions. At the exact endpoint, EDTA breaks down the [M-EBT] complex because [M-EDTA] is far more stable, liberating free uncomplexed EBT indicator which appears bright sky-blue at pH 10.'
+    },
+    {
+      topic: 'edta',
+      tag: 'EXP 01 • EDTA',
+      diff: 'Lab Technique',
+      q: 'Why is boiled water cooled and filtered before titrating for permanent hardness?',
+      a: 'Boiling decomposes temporary hardness (soluble calcium and magnesium bicarbonates) into insoluble carbonates: Ca(HCO₃)₂ → CaCO₃↓ + H₂O + CO₂↑. Filtration removes this precipitated CaCO₃. If not filtered, EDTA would redissolve the solid CaCO₃, yielding erroneous Total Hardness values instead of Permanent Hardness.'
+    },
+    {
+      topic: 'edta',
+      tag: 'EXP 01 • EDTA',
+      diff: 'Standardization',
+      q: 'Why is hardness universally expressed in terms of parts per million (ppm) of CaCO₃ equivalents?',
+      a: '1) Calcium carbonate (CaCO₃) has a round molecular weight of exactly 100 g/mol and equivalent weight of 50 g/equiv, greatly simplifying stoichiometry. 2) CaCO₃ is the most insoluble salt among common mineral precipitants, and standard hard water can be readily synthesized with high purity CaCO₃.'
+    },
+    {
+      topic: 'edta',
+      tag: 'EXP 01 • EDTA',
+      diff: 'Chemical Structure',
+      q: 'What is the structure and denticity of EDTA? How many coordinate bonds does it form?',
+      a: 'Disodium EDTA is a hexadentate ligand. It possesses 2 tertiary amino nitrogen donor atoms (with lone pairs) and 4 carboxylate oxygen donor atoms (-COO⁻), forming a very stable 1:1 octahedral cage complex with metal cations.'
+    },
+    {
+      topic: 'conductometry',
+      tag: 'EXP 02 • Conductometry',
+      diff: 'Ionic Mobility',
+      q: 'Why does conductance decrease steeply in the first arm of HCl vs NaOH titration?',
+      a: 'Hydrochloric acid is fully dissociated into H⁺ and Cl⁻. The H⁺ ion has an exceptionally high ionic mobility (λ° = 349.8 S·cm²/mol via Grotthuss proton hopping). As NaOH is titrated, H⁺ is converted to unionized H₂O, and replaced by Na⁺ which has a much lower mobility (λ° = 50.1 S·cm²/mol), causing a sharp linear drop in electrical conductance.'
+    },
+    {
+      topic: 'conductometry',
+      tag: 'EXP 02 • Conductometry',
+      diff: 'Theory',
+      q: 'Why does the conductance curve rise linearly after the equivalence point in HCl vs NaOH?',
+      a: 'After the equivalence point, all acid has been neutralized. Further addition of NaOH introduces free, highly mobile hydroxyl ions (OH⁻, λ° = 198.6 S·cm²/mol) and Na⁺ ions, causing total electrolyte conductance to rise steeply in a straight line.'
+    },
+    {
+      topic: 'conductometry',
+      tag: 'EXP 02 • Conductometry',
+      diff: 'Error Minimization',
+      q: 'Why should the titrant (NaOH) be at least 5 to 10 times more concentrated than the acid in conductometry?',
+      a: 'To minimize the dilution effect! If the titrant is dilute, adding large volumes increases total liquid volume significantly, causing an artificial downward curve in conductance. Higher concentration ensures minimal volume change during titration.'
+    },
+    {
+      topic: 'conductometry',
+      tag: 'EXP 03 • Acid Mixture',
+      diff: 'Equilibrium',
+      q: 'In a mixture of HCl and CH₃COOH, why is HCl neutralized completely before CH₃COOH begins reacting?',
+      a: 'HCl is a strong electrolyte that fully dissociates, releasing a high concentration of H⁺ ions. By Le Chatelier’s principle and the Common Ion Effect, the ionization of the weak acid CH₃COOH (Ka = 1.8 × 10⁻⁵) is heavily suppressed. Hence, NaOH reacts exclusively with H⁺ from HCl first.'
+    },
+    {
+      topic: 'conductometry',
+      tag: 'EXP 03 • Acid Mixture',
+      diff: 'Curve Analysis',
+      q: 'Why does the conductance curve between V₂ and V₄ show a gentle rise rather than a decrease?',
+      a: 'During acetic acid neutralization, unionized CH₃COOH is converted to highly ionized sodium acetate (CH₃COO⁻ + Na⁺). Although acetate ions have modest mobility (λ° = 40.9), the continuous generation of electrolyte ions causes conductance to gently rise until all acetic acid is consumed at V₄.'
+    },
+    {
+      topic: 'potentiometry',
+      tag: 'EXP 04 • Potentiometry',
+      diff: 'Cell Construction',
+      q: 'What are the indicator and reference electrodes used in the potentiometric titration of Fe²⁺ against KMnO₄?',
+      a: 'Indicator Electrode: Bright Platinum wire (Pt) electrode, which serves as an inert electron conduit sensitive to the Fe³⁺/Fe²⁺ and MnO₄⁻/Mn²⁺ redox ratios. Reference Electrode: Saturated Calomel Electrode (SCE, Hg/Hg₂Cl₂/sat. KCl), which maintains a constant potential of +0.242 V vs SHE.'
+    },
+    {
+      topic: 'potentiometry',
+      tag: 'EXP 04 • Potentiometry',
+      diff: 'Nernst Equation',
+      q: 'Explain the origin of the sigmoidal EMF jump at the equivalence point in Fe²⁺ vs KMnO₄.',
+      a: 'Prior to equivalence, the cell potential is governed by the Fe³⁺/Fe²⁺ redox couple (E° = +0.77 V). At the equivalence point, Fe²⁺ is completely oxidized, and the potential suddenly becomes governed by the much higher potential MnO₄⁻/Mn²⁺ couple (E° = +1.51 V), producing an abrupt sigmoidal jump of ~250–400 mV.'
+    },
+    {
+      topic: 'potentiometry',
+      tag: 'EXP 04 • Potentiometry',
+      diff: 'Analytical Calculus',
+      q: 'Why is the first derivative curve (ΔE/ΔV vs V) plotted in potentiometric titrations?',
+      a: 'On a sigmoidal E vs V curve, determining the exact point of maximum slope (inflection point) visually can introduce observer error. The first derivative ΔE/ΔV transforms the inflection into a sharp, narrow mathematical peak maximum, allowing the equivalence volume V₁ to be located with extreme precision.'
+    },
+    {
+      topic: 'potentiometry',
+      tag: 'EXP 04 • Potentiometry',
+      diff: 'Reagents',
+      q: 'Why is dilute H₂SO₄ added to the titration beaker, and why can HCl or HNO₃ not be used?',
+      a: 'H₂SO₄ provides the necessary acidic medium (8 H⁺ per MnO₄⁻) without participating in redox. HCl cannot be used because KMnO₄ would oxidize Cl⁻ to poisonous Cl₂ gas, consuming extra titrant. HNO₃ cannot be used because it is itself an oxidizing agent that would oxidize Fe²⁺ prematurely.'
+    },
+    {
+      topic: 'potentiometry',
+      tag: 'EXP 04 • Potentiometry',
+      diff: 'Instrumentation',
+      q: 'Why is a potentiometer or high-impedance digital millivoltmeter used instead of an ordinary voltmeter?',
+      a: 'An ordinary voltmeter draws appreciable current from the electrochemical cell, altering ionic concentrations near the electrode surfaces (polarization) and causing an IR drop error. A potentiometer or digital millivoltmeter draws near-zero current (infinite input impedance > 10¹² Ω).'
+    }
+  ];
+
+  let currentVivaIdx = 0;
+  let filteredVivaList = [...vivaQuestions];
+
+  const modalViva = document.getElementById('modal-viva');
+  const btnOpenViva = document.getElementById('btn-open-viva');
+  const btnCloseViva = document.getElementById('btn-close-viva');
+  const vivaFilter = document.getElementById('viva-filter');
+  const vivaCurrentIdx = document.getElementById('viva-current-idx');
+  const vivaTotalCount = document.getElementById('viva-total-count');
+
+  const vivaCardTag = document.getElementById('viva-card-tag');
+  const vivaCardDiff = document.getElementById('viva-card-diff');
+  const vivaQuestionText = document.getElementById('viva-question-text');
+  const vivaAnswerBox = document.getElementById('viva-answer-box');
+  const vivaAnswerText = document.getElementById('viva-answer-text');
+
+  const vivaBtnPrev = document.getElementById('viva-btn-prev');
+  const vivaBtnNext = document.getElementById('viva-btn-next');
+  const vivaBtnReveal = document.getElementById('viva-btn-reveal');
+
+  function renderVivaCard() {
+    if (!filteredVivaList.length) return;
+    const item = filteredVivaList[currentVivaIdx];
+    vivaCardTag.textContent = item.tag;
+    vivaCardDiff.textContent = item.diff;
+    vivaQuestionText.textContent = item.q;
+    vivaAnswerText.textContent = item.a;
+
+    vivaAnswerBox.classList.add('hidden');
+    vivaBtnReveal.textContent = 'Show Answer';
+
+    vivaCurrentIdx.textContent = currentVivaIdx + 1;
+    vivaTotalCount.textContent = filteredVivaList.length;
+
+    vivaBtnPrev.disabled = (currentVivaIdx === 0);
+    vivaBtnNext.disabled = (currentVivaIdx === filteredVivaList.length - 1);
+  }
+
+  btnOpenViva.addEventListener('click', () => {
+    modalViva.classList.remove('hidden');
+    playLabTone('click');
+  });
+
+  btnCloseViva.addEventListener('click', () => {
+    modalViva.classList.add('hidden');
+    playLabTone('click');
+  });
+
+  vivaFilter.addEventListener('change', () => {
+    const val = vivaFilter.value;
+    if (val === 'all') {
+      filteredVivaList = [...vivaQuestions];
+    } else {
+      filteredVivaList = vivaQuestions.filter(q => q.topic === val);
+    }
+    currentVivaIdx = 0;
+    renderVivaCard();
+    playLabTone('click');
+  });
+
+  vivaBtnReveal.addEventListener('click', () => {
+    if (vivaAnswerBox.classList.contains('hidden')) {
+      vivaAnswerBox.classList.remove('hidden');
+      vivaBtnReveal.textContent = 'Hide Answer';
+      playLabTone('click');
+    } else {
+      vivaAnswerBox.classList.add('hidden');
+      vivaBtnReveal.textContent = 'Show Answer';
+    }
+  });
+
+  vivaBtnPrev.addEventListener('click', () => {
+    if (currentVivaIdx > 0) {
+      currentVivaIdx--;
+      renderVivaCard();
+      playLabTone('click');
+    }
+  });
+
+  vivaBtnNext.addEventListener('click', () => {
+    if (currentVivaIdx < filteredVivaList.length - 1) {
+      currentVivaIdx++;
+      renderVivaCard();
+      playLabTone('click');
+    }
+  });
+
+  renderVivaCard();
+
+  // --- LAB MANUAL / THEORY MODAL ---
+  const modalTheory = document.getElementById('modal-theory');
+  const btnOpenTheory = document.getElementById('btn-open-theory');
+  const btnCloseTheory = document.getElementById('btn-close-theory');
+
+  btnOpenTheory.addEventListener('click', () => {
+    modalTheory.classList.remove('hidden');
+    playLabTone('click');
+  });
+
+  btnCloseTheory.addEventListener('click', () => {
+    modalTheory.classList.add('hidden');
+    playLabTone('click');
+  });
+
 
 });
