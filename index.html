@@ -121,6 +121,14 @@
           <span class="hidden sm:inline">Lab Manual</span>
         </button>
 
+        <!-- Master Print Observation Sheet Button (#8EA66B & #D8A2A2) -->
+        <button id="btn-print-sheet" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#8EA66B] to-[#6E864B] hover:from-[#769153] hover:to-[#5B713B] text-xs font-semibold text-white shadow-md shadow-[#8EA66B]/25 flex items-center gap-2 transition hover:scale-[1.02] active:scale-[0.98]">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+          </svg>
+          <span>Print Observation Sheet</span>
+        </button>
+      </div>
 
     </div>
   </header>
@@ -1394,6 +1402,100 @@
 
   <!-- ========================================================================= -->
   <!-- MODAL 1: PRINT LAB OBSERVATION SHEET (A4 RECORD BOOK FORMAT)              -->
+  <!-- ========================================================================= -->
+  <div id="modal-observation-sheet" class="fixed inset-0 z-50 bg-[#26331C]/40 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white border border-[#E5DEC9] rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden my-auto">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-[#E5DEC9] flex items-center justify-between bg-[#FAF8F5]">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-[#8EA66B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <h3 class="text-base font-bold text-[#3C4E26]">Lab Observation Sheet Generator</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-trigger-print" class="px-3 py-1.5 bg-[#8EA66B] hover:bg-[#789354] text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span>Print to PDF / Paper</span>
+          </button>
+          <button id="btn-close-modal-sheet" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Document Preview Area -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-6 text-[#26331C] bg-white" id="printable-sheet-content">
+        
+        <!-- Printable Sheet Header (Standard Engineering College Format) -->
+        <div class="border-b-2 border-[#3C4E26] pb-4 text-center">
+          <h2 class="text-lg font-black tracking-wider uppercase text-[#3C4E26] font-serif">DEPARTMENT OF CHEMISTRY • B.TECH LABORATORY RECORD</h2>
+          <p class="text-xs text-[#5C6B4F] uppercase tracking-widest font-mono mt-0.5">Official Laboratory Observation & Evaluation Sheet</p>
+          
+          <!-- Student Metadata Form -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left mt-4 text-xs font-mono bg-[#FAF8F5] p-3 border border-[#E5DEC9] rounded">
+            <div>
+              <span class="text-[#5C6B4F] block text-[10px]">STUDENT NAME:</span>
+              <input type="text" id="sheet-student-name" value="Candidate" class="w-full font-bold text-[#3C4E26] bg-transparent border-b border-dashed border-[#8EA66B] focus:outline-none">
+            </div>
+            <div>
+              <span class="text-[#5C6B4F] block text-[10px]">ROLL NO / USN:</span>
+              <input type="text" id="sheet-roll-no" value="23BTCHEM042" class="w-full font-bold text-[#3C4E26] bg-transparent border-b border-dashed border-[#8EA66B] focus:outline-none">
+            </div>
+            <div>
+              <span class="text-[#5C6B4F] block text-[10px]">BRANCH & SECTION:</span>
+              <input type="text" id="sheet-branch" value="CSE - Section A" class="w-full font-bold text-[#3C4E26] bg-transparent border-b border-dashed border-[#8EA66B] focus:outline-none">
+            </div>
+            <div>
+              <span class="text-[#5C6B4F] block text-[10px]">DATE OF EXPERIMENT:</span>
+              <input type="date" id="sheet-date" class="w-full font-bold text-[#3C4E26] bg-transparent border-b border-dashed border-[#8EA66B] focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <!-- Sheet Selector Tabs -->
+        <div class="flex items-center gap-2 border-b border-slate-300 pb-2 no-print">
+          <span class="text-xs font-bold text-[#3C4E26] uppercase">Select Experiment Sheet:</span>
+          <select id="sheet-experiment-select" class="text-xs font-mono border border-[#E5DEC9] rounded px-2 py-1 bg-white text-[#3C4E26] font-semibold">
+            <option value="all">Complete Portfolio (All 4 Experiments)</option>
+            <option value="edta">Exp 1: EDTA Water Hardness</option>
+            <option value="cond-strong">Exp 2: Conductometry (HCl vs NaOH)</option>
+            <option value="cond-mix">Exp 3: Conductometry (Acid Mixture)</option>
+            <option value="pot">Exp 4: Potentiometry (Fe²⁺ vs KMnO₄)</option>
+          </select>
+        </div>
+
+        <!-- Rendered Observation Sheet Sections Container -->
+        <div id="sheet-dynamic-body" class="space-y-8 font-sans">
+          <!-- Filled dynamically by JavaScript -->
+        </div>
+
+        <!-- Faculty Signature & Marks Breakdown Block -->
+        <div class="border-t-2 border-[#3C4E26] pt-6 mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-xs font-mono">
+          <div class="p-2 border border-[#E5DEC9] rounded bg-[#FAF8F5]">
+            <span class="text-[#5C6B4F] block text-[10px]">OBSERVATION (10M)</span>
+            <span class="font-bold text-[#3C4E26] text-sm mt-1 block">_____ / 10</span>
+          </div>
+          <div class="p-2 border border-[#E5DEC9] rounded bg-[#FAF8F5]">
+            <span class="text-[#5C6B4F] block text-[10px]">CALCULATION (10M)</span>
+            <span class="font-bold text-[#3C4E26] text-sm mt-1 block">_____ / 10</span>
+          </div>
+          <div class="p-2 border border-[#E5DEC9] rounded bg-[#FAF8F5]">
+            <span class="text-[#5C6B4F] block text-[10px]">VIVA VOCE (10M)</span>
+            <span class="font-bold text-[#3C4E26] text-sm mt-1 block">_____ / 10</span>
+          </div>
+          <div class="p-2 border border-[#8EA66B] rounded bg-[#FFF9D6] flex flex-col justify-between">
+            <span class="text-[#66541D] block text-[10px] font-bold">FACULTY SIGNATURE</span>
+            <span class="font-serif italic text-[#26331C] text-xs mt-3">Verified & Approved</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: VIVA VOCE FLASHCARDS INTERACTIVE REVISION DRAWER                 -->
   <!-- ========================================================================= -->
   <div id="modal-viva" class="fixed inset-0 z-50 bg-[#26331C]/40 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
     <div class="bg-white border border-[#E5DEC9] rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden my-auto">

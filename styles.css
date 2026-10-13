@@ -208,4 +208,94 @@ input[type="number"]:hover::-webkit-outer-spin-button {
   border-left: 3px solid #D8A2A2 !important;
 }
 
+/* =========================================================================
+   PRINT STYLESHEET (A4 ACADEMIC OBSERVATION SHEET STANDARD)
+   ========================================================================= */
+@media print {
+  header,
+  nav,
+  main,
+  footer,
+  #modal-viva,
+  #modal-theory,
+  #modal-bulk-import,
+  #modal-architecture,
+  .no-print,
+  #btn-trigger-print,
+  #btn-close-modal-sheet {
+    display: none !important;
+  }
 
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10.5pt !important;
+  }
+
+  #modal-observation-sheet {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+  }
+
+  #modal-observation-sheet > div {
+    max-width: 100% !important;
+    max-height: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+  }
+
+  #printable-sheet-content {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 10.5pt !important;
+  }
+
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  table, th, td {
+    border: 1px solid #111111 !important;
+    color: #000000 !important;
+  }
+
+  th {
+    background-color: #f1f5f9 !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 9pt !important;
+  }
+
+  td {
+    font-size: 9.5pt !important;
+  }
+
+  input {
+    border: none !important;
+    border-bottom: 1px solid #000000 !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+  }
+
+  .sheet-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 1.2cm 1.0cm;
+  }
+}

@@ -2252,5 +2252,293 @@ document.addEventListener('DOMContentLoaded', () => {
     playLabTone('click');
   });
 
+  // --- PRINT OBSERVATION SHEET GENERATOR (B.TECH ACADEMIC MANUAL FORMAT) ---
+  const modalSheet = document.getElementById('modal-observation-sheet');
+  const btnPrintSheet = document.getElementById('btn-print-sheet');
+  const btnCloseModalSheet = document.getElementById('btn-close-modal-sheet');
+  const btnTriggerPrint = document.getElementById('btn-trigger-print');
+  const sheetExperimentSelect = document.getElementById('sheet-experiment-select');
+  const sheetDynamicBody = document.getElementById('sheet-dynamic-body');
+  const sheetDateInput = document.getElementById('sheet-date');
+
+  // Set today's date
+  const today = new Date().toISOString().split('T')[0];
+  if (sheetDateInput) sheetDateInput.value = today;
+
+  btnPrintSheet.addEventListener('click', () => {
+    generateObservationSheet();
+    modalSheet.classList.remove('hidden');
+    playLabTone('click');
+  });
+
+  btnCloseModalSheet.addEventListener('click', () => {
+    modalSheet.classList.add('hidden');
+    playLabTone('click');
+  });
+
+  sheetExperimentSelect.addEventListener('change', generateObservationSheet);
+
+  btnTriggerPrint.addEventListener('click', () => {
+    window.print();
+  });
+
+  function generateObservationSheet() {
+    const selected = sheetExperimentSelect.value;
+    let html = '';
+
+    // EXP 1 Section
+    if (selected === 'all' || selected === 'edta') {
+      const v1 = parseFloat(edtaV1Input.value) || 18.5;
+      const v2 = parseFloat(edtaV2Input.value) || 23.2;
+      const v3 = parseFloat(edtaV3Input.value) || 11.4;
+      const totalH = ((v2 / v1) * 1000).toFixed(2);
+      const permH = ((v3 / v1) * 1000).toFixed(2);
+      const tempH = (parseFloat(totalH) - parseFloat(permH)).toFixed(2);
+
+      html += `
+        <div class="sheet-section border border-slate-400 rounded p-4 space-y-4">
+          <div class="border-b border-slate-400 pb-2">
+            <h3 class="text-sm font-bold uppercase text-slate-900 font-serif">EXPERIMENT 1: DETERMINATION OF TOTAL, PERMANENT & TEMPORARY HARDNESS OF WATER BY EDTA METHOD</h3>
+            <p class="text-xs text-slate-700">Principle: Complexometric titration using Disodium EDTA and Eriochrome Black T indicator at pH 10 buffer.</p>
+          </div>
+
+          <!-- Observation Tables -->
+          <div class="space-y-3">
+            <h4 class="text-xs font-bold text-slate-800 uppercase">Table 1: Burette Readings & Titration Concordance</h4>
+            <table class="w-full text-xs border-collapse border border-slate-400 font-mono">
+              <thead>
+                <tr class="bg-slate-100 border-b border-slate-400 text-slate-900">
+                  <th class="border border-slate-400 p-1.5 text-left">Titration Description</th>
+                  <th class="border border-slate-400 p-1.5 text-center">Volume of Aliquot (mL)</th>
+                  <th class="border border-slate-400 p-1.5 text-center">Initial Burette Reading (mL)</th>
+                  <th class="border border-slate-400 p-1.5 text-center">Final Burette Reading (mL)</th>
+                  <th class="border border-slate-400 p-1.5 text-center">Volume of EDTA (mL)</th>
+                  <th class="border border-slate-400 p-1.5 text-center font-bold">Concordant Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="border border-slate-400 p-1.5">1. Std. Hard Water vs EDTA (Standardization)</td>
+                  <td class="border border-slate-400 p-1.5 text-center">50.0</td>
+                  <td class="border border-slate-400 p-1.5 text-center">0.0</td>
+                  <td class="border border-slate-400 p-1.5 text-center">${v1.toFixed(1)}</td>
+                  <td class="border border-slate-400 p-1.5 text-center font-bold">${v1.toFixed(1)}</td>
+                  <td class="border border-slate-400 p-1.5 text-center font-bold bg-slate-50">V₁ = ${v1.toFixed(1)} mL</td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-400 p-1.5">2. Sample Water vs EDTA (Total Hardness)</td>
+                  <td class="border border-slate-400 p-1.5 text-center">50.0</td>
+                  <td class="border border-slate-400 p-1.5 text-center">0.0</td>
+                  <td class="border border-slate-400 p-1.5 text-center">${v2.toFixed(1)}</td>
+                  <td class="border border-slate-400 p-1.5 text-center font-bold">${v2.toFixed(1)}</td>
+                  <td class="border border-slate-400 p-1.5 text-center font-bold bg-slate-50">V₂ = ${v2.toFixed(1)} mL</td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-400 p-1.5">3. Boiled Water vs EDTA (Permanent Hardness)</td>
+                  <td class="border border-slate-400 p-1.5 text-center">50.0</td>
+                  <td class="border border-slate-400 p-1.5 text-center">0.0</td>
+                  <td class="border border-slate-400 p-1.5 text-center">${v3.toFixed(1)}</td>
+                  <td class="border border-slate-400 p-1.5 text-center font-bold">${v3.toFixed(1)}</td>
+                  <td class="border border-slate-400 p-1.5 text-center font-bold bg-slate-50">V₃ = ${v3.toFixed(1)} mL</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Formula & Calculation Block -->
+          <div class="bg-slate-50 p-3 rounded border border-slate-300 text-xs font-mono space-y-2">
+            <div class="font-bold text-slate-900">Calculations:</div>
+            <div>• Total Hardness = (V₂ / V₁) × 1000 = (${v2.toFixed(1)} / ${v1.toFixed(1)}) × 1000 = <strong>${totalH} mg/L (ppm CaCO₃ eq)</strong></div>
+            <div>• Permanent Hardness = (V₃ / V₁) × 1000 = (${v3.toFixed(1)} / ${v1.toFixed(1)}) × 1000 = <strong>${permH} mg/L (ppm CaCO₃ eq)</strong></div>
+            <div>• Temporary Hardness = Total Hardness - Permanent Hardness = ${totalH} - ${permH} = <strong>${tempH} mg/L (ppm CaCO₃ eq)</strong></div>
+          </div>
+
+          <!-- Results Summary -->
+          <div class="border-t border-slate-400 pt-2 text-xs">
+            <span class="font-bold text-slate-900">Result:</span>
+            <span>Total Hardness = <strong>${totalH} ppm</strong>, Permanent Hardness = <strong>${permH} ppm</strong>, Temporary Hardness = <strong>${tempH} ppm</strong>.</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // EXP 2 Section
+    if (selected === 'all' || selected === 'cond-strong') {
+      const v2 = parseFloat(resCondStrongV2.textContent) || 10.0;
+      const n1 = parseFloat(resCondStrongN1.textContent) || 0.025;
+      const str = parseFloat(resCondStrongStr.textContent) || 0.9125;
+      const n2 = parseFloat(condStrongNormBase.value) || 0.10;
+
+      let rowsHtml = '';
+      condStrongData.forEach((row, i) => {
+        rowsHtml += `
+          <tr>
+            <td class="border border-slate-400 p-1 text-center">${i + 1}</td>
+            <td class="border border-slate-400 p-1 text-center">${row.v.toFixed(1)}</td>
+            <td class="border border-slate-400 p-1 text-center font-bold">${row.c.toFixed(2)}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+        <div class="sheet-section border border-slate-400 rounded p-4 space-y-4">
+          <div class="border-b border-slate-400 pb-2">
+            <h3 class="text-sm font-bold uppercase text-slate-900 font-serif">EXPERIMENT 2: CONDUCTOMETRIC TITRATION OF STRONG ACID (HCl) AGAINST STRONG BASE (NaOH)</h3>
+            <p class="text-xs text-slate-700">Principle: Neutralization of highly mobile H⁺ ions by NaOH yielding a classic V-shaped conductance profile.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h4 class="text-xs font-bold text-slate-800 uppercase mb-1">Observation Table:</h4>
+              <div class="max-h-48 overflow-y-auto border border-slate-400">
+                <table class="w-full text-[11px] border-collapse font-mono">
+                  <thead>
+                    <tr class="bg-slate-100 border-b border-slate-400">
+                      <th class="border border-slate-400 p-1 text-center">#</th>
+                      <th class="border border-slate-400 p-1 text-center">Vol NaOH (mL)</th>
+                      <th class="border border-slate-400 p-1 text-center">Conductance (mS/cm)</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rowsHtml}</tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="space-y-3 font-mono text-xs">
+              <div class="bg-slate-50 p-3 rounded border border-slate-300 space-y-2">
+                <div class="font-bold text-slate-900">Analytical Parameters & Equivalence:</div>
+                <div>• Volume of HCl taken (V₁) = 40.0 mL</div>
+                <div>• Normality of NaOH (N₂) = ${n2.toFixed(2)} N</div>
+                <div>• Equivalence Point (V₂) from intersection = <strong>${v2.toFixed(2)} mL</strong></div>
+                <div class="border-t border-slate-300 pt-1">
+                  • N₁ = (N₂ × V₂) / 40.0 = (${n2.toFixed(2)} × ${v2.toFixed(2)}) / 40.0 = <strong>${n1.toFixed(4)} N</strong>
+                </div>
+                <div>
+                  • Strength of HCl = N₁ × 36.5 = ${n1.toFixed(4)} × 36.5 = <strong>${str.toFixed(4)} g/L</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-400 pt-2 text-xs">
+            <span class="font-bold text-slate-900">Result:</span>
+            <span>Normality of HCl = <strong>${n1.toFixed(4)} N</strong>; Strength of HCl = <strong>${str.toFixed(4)} g/L</strong>.</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // EXP 3 Section
+    if (selected === 'all' || selected === 'cond-mix') {
+      const v2 = parseFloat(condMixV2Badge.textContent) || 6.0;
+      const v4 = parseFloat(condMixV4Badge.textContent) || 14.0;
+      const v3 = (v4 - v2).toFixed(2);
+      const n1 = parseFloat(resCondMixN1.textContent) || 0.015;
+      const str1 = parseFloat(resCondMixStr1.textContent) || 0.5475;
+      const n3 = parseFloat(resCondMixN3.textContent) || 0.02;
+      const str3 = parseFloat(resCondMixStr3.textContent) || 1.201;
+
+      html += `
+        <div class="sheet-section border border-slate-400 rounded p-4 space-y-4">
+          <div class="border-b border-slate-400 pb-2">
+            <h3 class="text-sm font-bold uppercase text-slate-900 font-serif">EXPERIMENT 3: CONDUCTOMETRIC TITRATION OF ACID MIXTURE (HCl + CH₃COOH) AGAINST NaOH</h3>
+            <p class="text-xs text-slate-700">Principle: Fractional titration resolving strong and weak acid inflections using linear regressions.</p>
+          </div>
+
+          <div class="bg-slate-50 p-3 rounded border border-slate-300 text-xs font-mono space-y-2">
+            <div class="font-bold text-slate-900">Equivalence Volumes & Formulas:</div>
+            <div class="grid grid-cols-3 gap-2">
+              <div>V₂ (for HCl) = <strong>${v2.toFixed(2)} mL</strong></div>
+              <div>V₄ (Total NaOH) = <strong>${v4.toFixed(2)} mL</strong></div>
+              <div>V₃ (for CH₃COOH) = <strong>${v3} mL</strong></div>
+            </div>
+            <div class="border-t border-slate-300 pt-2 space-y-1">
+              <div>1. HCl: N₁ = (0.10 × ${v2.toFixed(2)}) / 40.0 = <strong>${n1.toFixed(4)} N</strong>; Strength = ${n1.toFixed(4)} × 36.5 = <strong>${str1.toFixed(4)} g/L</strong></div>
+              <div>2. CH₃COOH: N₃ = (0.10 × ${v3}) / 40.0 = <strong>${n3.toFixed(4)} N</strong>; Strength = ${n3.toFixed(4)} × 60.05 = <strong>${str3.toFixed(4)} g/L</strong></div>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-400 pt-2 text-xs">
+            <span class="font-bold text-slate-900">Result:</span>
+            <span>Strength of HCl = <strong>${str1.toFixed(4)} g/L</strong>; Strength of CH₃COOH = <strong>${str3.toFixed(4)} g/L</strong>.</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // EXP 4 Section
+    if (selected === 'all' || selected === 'pot') {
+      const v1 = parseFloat(resPotV1.textContent) || 10.0;
+      const n2 = parseFloat(resPotN2.textContent) || 0.05;
+      const ironStr = parseFloat(resPotIronStr.textContent) || 2.7925;
+      const n1 = parseFloat(potNormKmno4.value) || 0.10;
+
+      let potRowsHtml = '';
+      potData.forEach((row, i) => {
+        let dv = '-', de = '-', deriv = '-';
+        if (i > 0) {
+          const deltaV = row.v - potData[i - 1].v;
+          const deltaE = row.e - potData[i - 1].e;
+          dv = deltaV.toFixed(1);
+          de = deltaE.toFixed(0);
+          deriv = deltaV > 0 ? (deltaE / deltaV).toFixed(1) : '-';
+        }
+        potRowsHtml += `
+          <tr>
+            <td class="border border-slate-400 p-1 text-center">${i + 1}</td>
+            <td class="border border-slate-400 p-1 text-center">${row.v.toFixed(1)}</td>
+            <td class="border border-slate-400 p-1 text-center">${row.e.toFixed(0)}</td>
+            <td class="border border-slate-400 p-1 text-center">${dv}</td>
+            <td class="border border-slate-400 p-1 text-center">${de}</td>
+            <td class="border border-slate-400 p-1 text-center font-bold">${deriv}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+        <div class="sheet-section border border-slate-400 rounded p-4 space-y-4">
+          <div class="border-b border-slate-400 pb-2">
+            <h3 class="text-sm font-bold uppercase text-slate-900 font-serif">EXPERIMENT 4: POTENTIOMETRIC TITRATION OF Fe²⁺ USING STANDARD KMnO₄</h3>
+            <p class="text-xs text-slate-700">Principle: Redox titration monitored by Pt-SCE cell with ΔE/ΔV first derivative inflection analysis.</p>
+          </div>
+
+          <div>
+            <h4 class="text-xs font-bold text-slate-800 uppercase mb-1">Observation & Derivative Table:</h4>
+            <div class="max-h-48 overflow-y-auto border border-slate-400">
+              <table class="w-full text-[11px] border-collapse font-mono">
+                <thead>
+                  <tr class="bg-slate-100 border-b border-slate-400">
+                    <th class="border border-slate-400 p-1 text-center">#</th>
+                    <th class="border border-slate-400 p-1 text-center">Vol KMnO₄ (mL)</th>
+                    <th class="border border-slate-400 p-1 text-center">EMF (mV)</th>
+                    <th class="border border-slate-400 p-1 text-center">ΔV</th>
+                    <th class="border border-slate-400 p-1 text-center">ΔE</th>
+                    <th class="border border-slate-400 p-1 text-center">ΔE/ΔV (mV/mL)</th>
+                  </tr>
+                </thead>
+                <tbody>${potRowsHtml}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-3 rounded border border-slate-300 text-xs font-mono space-y-2">
+            <div class="font-bold text-slate-900">Calculations:</div>
+            <div>• Volume of Fe²⁺ taken (V₂) = 20.0 mL</div>
+            <div>• Equivalence Volume (V₁) from (ΔE/ΔV)ₘₐₓ = <strong>${v1.toFixed(2)} mL</strong></div>
+            <div>• Normality of Fe²⁺: N₂ = (N₁ × V₁) / 20.0 = (${n1.toFixed(2)} × ${v1.toFixed(2)}) / 20.0 = <strong>${n2.toFixed(4)} N</strong></div>
+            <div>• Amount of Iron in 1 Litre = N₂ × 55.85 = ${n2.toFixed(4)} × 55.85 = <strong>${ironStr.toFixed(4)} g/L</strong></div>
+          </div>
+
+          <div class="border-t border-slate-400 pt-2 text-xs">
+            <span class="font-bold text-slate-900">Result:</span>
+            <span>Normality of Fe²⁺ = <strong>${n2.toFixed(4)} N</strong>; Concentration of Iron = <strong>${ironStr.toFixed(4)} g/L</strong>.</span>
+          </div>
+        </div>
+      `;
+    }
+
+    sheetDynamicBody.innerHTML = html;
+  }
+
 
 });

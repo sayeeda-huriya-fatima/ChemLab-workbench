@@ -27,6 +27,10 @@ An interactive engineering chemistry laboratory calculator and virtual workbench
 * **Bulk Spreadsheet Import:** Paste two-column TSV/CSV data from Excel or notes directly into data tables.
 * **Inline Editing:** Double-click any cell to edit readings directly.
 
+## Export Options
+* **Print Observation Sheet:** University lab record sheet formatting matching standard practical manuals.
+* **PNG Graph Export:** High-resolution chart exports for digital submissions.
+
 ## Running the Application
 Open `index.html` directly in any modern browser, or run a local server:
 ```bash
