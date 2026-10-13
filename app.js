@@ -2540,5 +2540,4 @@ document.addEventListener('DOMContentLoaded', () => {
     sheetDynamicBody.innerHTML = html;
   }
 
-
 });

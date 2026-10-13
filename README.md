@@ -31,6 +31,9 @@ An interactive engineering chemistry laboratory calculator and virtual workbench
 * **Print Observation Sheet:** University lab record sheet formatting matching standard practical manuals.
 * **PNG Graph Export:** High-resolution chart exports for digital submissions.
 
+## Virtual Titration Simulator
+* Interactive pre-lab virtual titration simulator with animated buret, stirrer, and drop counter.
+
 ## Running the Application
 Open `index.html` directly in any modern browser, or run a local server:
 ```bash
